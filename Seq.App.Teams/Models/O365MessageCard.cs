@@ -1,18 +1,15 @@
-﻿using Seq.App.Teams.Models;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text.Json.Serialization;
 
-namespace Seq.App.Teams.Models
+namespace Seq.App.Teams.Models;
+
+internal sealed class O365MessageCard : O365ConnectorCard
 {
-    public class O365MessageCard : O365ConnectorCard
-    {
-        [JsonProperty(PropertyName = "@context")]
-        public readonly string Context = "http://schema.org/extensions";
-        [JsonProperty(PropertyName = "@type")]
-        public readonly string Type = "MessageCard";
-    }
+    [JsonPropertyName("@context")]
+#pragma warning disable CA1822 // Mark members as static
+    public string Context => "http://schema.org/extensions";
+#pragma warning restore CA1822 // Mark members as static
+    [JsonPropertyName("@type")]
+#pragma warning disable CA1822 // Mark members as static
+    public string Type => "MessageCard";
+#pragma warning restore CA1822 // Mark members as static
 }

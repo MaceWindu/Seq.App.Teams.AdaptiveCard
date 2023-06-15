@@ -1,0 +1,18 @@
+<Project>
+    <ItemGroup>
+        <PackageVersion Include="Seq.Apps" Version="2021.4.0" />
+        <PackageVersion Include="System.Text.Json" Version="7.0.3" />
+        
+        <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="1.1.1" />
+        <PackageVersion Include="PolySharp" Version="1.13.2" />
+        
+        <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.6.2" />
+        <PackageVersion Include="NUnit3TestAdapter" Version="4.5.0" />
+        <PackageVersion Include="NUnit" Version="3.13.3" />
+
+        <PackageVersion Include="Lindhart.Analyser.MissingAwaitWarning" Version="3.0.0-beta" />
+        <PackageVersion Include="NUnit.Analyzers" Version="3.6.1" />
+        <PackageVersion Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="8.0.0-preview1.23165.1" />
+        <PackageVersion Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.5-beta1.23270.2" />
+    </ItemGroup>
+</Project>
