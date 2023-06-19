@@ -1,8 +1,6 @@
 variables:
   - name: solution
     value: Seq.App.Teams.AdaptiveCard.sln
-  - name: build_configuration
-    value: Release
   - name: assemblyVersion
     value: 1.0.0
   - name: packageVersion
@@ -46,9 +44,19 @@ stages:
     - task: MSBuild@1
       inputs:
         solution: '$(solution)'
-        configuration: '$(build_configuration)'
+        configuration: 'Release'
         msbuildArguments: '/t:Restore;Rebuild -m /p:ContinuousIntegrationBuild=true'
       displayName: Build solution
+
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: 'publish'
+        projects: '$(Build.SourcesDirectory)/src/Seq.App.Teams.AdaptiveCard/Seq.App.Teams.AdaptiveCard.csproj'
+        publishWebProjects: false
+        zipAfterPublish: false
+        arguments: -f netstandard2.0 -c Release
+        nobuild: true
+      displayName: Publish project
 
     - task: DotNetCoreCLI@2
       inputs:
@@ -56,7 +64,7 @@ stages:
         projects: '$(Build.SourcesDirectory)/tests/Seq.App.Teams.AdaptiveCard.Tests/Seq.App.Teams.AdaptiveCard.Tests.csproj'
         publishWebProjects: false
         zipAfterPublish: false
-        arguments: -f net7.0 -c $(build_configuration)
+        arguments: -f net7.0 -c Release
         nobuild: true
       displayName: Publish test project for net7.0
 
