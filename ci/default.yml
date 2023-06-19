@@ -102,20 +102,28 @@ stages:
 
     - task: CmdLine@2
       inputs:
-        script: nuget.exe Pack $(Build.SourcesDirectory)\ci\Seq.App.Teams.AdaptiveCard.nuspec -OutputDirectory $(Build.SourcesDirectory)\ci
+        script: nuget.exe Pack $(Build.SourcesDirectory)\ci\Seq.App.Teams.AdaptiveCard.nuspec -OutputDirectory $(Build.SourcesDirectory)\built
         workingDirectory: $(Build.SourcesDirectory)/ci
-      displayName: Build nuget
+      displayName: Build nuget for artifacts
+      condition: and(succeeded(), ne(variables['Build.SourceBranchName'], 'release'))
+
+    - task: CmdLine@2
+      inputs:
+        script: nuget.exe Pack $(Build.SourcesDirectory)\ci\Seq.App.Teams.AdaptiveCard.nuspec -OutputDirectory $(Build.SourcesDirectory)\built -Symbols -SymbolPackageFormat snupkg
+        workingDirectory: $(Build.SourcesDirectory)/ci
+      displayName: Build nuget for nuget.org
+      condition: and(succeeded(), eq(variables['Build.SourceBranchName'], 'release'))
 
     - task: PublishBuildArtifacts@1
       inputs:
-        pathToPublish: '$(Build.SourcesDirectory)/ci'
+        pathToPublish: '$(Build.SourcesDirectory)/built'
         artifactName: 'nuget'
       displayName: Publish nuget to artifacts
 
     - task: NuGetCommand@2
       inputs:
         command: 'push'
-        packagesToPush: '$(Build.SourcesDirectory)/ci/Seq.App.Teams.AdaptiveCard.*.nupkg'
+        packagesToPush: '$(Build.SourcesDirectory)/built/Seq.App.Teams.AdaptiveCard.*.nupkg'
         nuGetFeedType: 'internal'
         publishVstsFeed: 'macewindu/projects'
       displayName: Publish to Azure Artifacts feed
@@ -124,7 +132,7 @@ stages:
     - task: NuGetCommand@2
       inputs:
         command: 'push'
-        packagesToPush: '$(Build.SourcesDirectory)/ci/Seq.App.Teams.AdaptiveCard.*.nupkg'
+        packagesToPush: '$(Build.SourcesDirectory)/built/Seq.App.Teams.AdaptiveCard.*.nupkg'
         nuGetFeedType: 'external'
         publishFeedCredentials: 'nuget.org'
       displayName: Publish to Nuget.org
