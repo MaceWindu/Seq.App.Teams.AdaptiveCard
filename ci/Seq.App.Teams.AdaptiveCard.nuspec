@@ -24,9 +24,9 @@
         <file src="..\LICENSE.txt" />
         <file src="..\README.md" />
 
-        <file src="..\src\Seq.App.Teams.AdaptiveCard\bin\Release\netstandard2.0\Seq.App.Teams.pdb" target="lib\netstandard2.0\" />
-        <file src="..\src\Seq.App.Teams.AdaptiveCard\bin\Release\netstandard2.0\Seq.App.Teams.xml" target="lib\netstandard2.0\" />
-        <file src="..\src\Seq.App.Teams.AdaptiveCard\bin\Release\netstandard2.0\Seq.App.Teams.dll" target="lib\netstandard2.0\" />
+        <file src="..\src\Seq.App.Teams.AdaptiveCard\bin\Release\netstandard2.0\Seq.App.Teams.AdaptiveCard.pdb" target="lib\netstandard2.0\" />
+        <file src="..\src\Seq.App.Teams.AdaptiveCard\bin\Release\netstandard2.0\Seq.App.Teams.AdaptiveCard.xml" target="lib\netstandard2.0\" />
+        <file src="..\src\Seq.App.Teams.AdaptiveCard\bin\Release\netstandard2.0\Seq.App.Teams.AdaptiveCard.dll" target="lib\netstandard2.0\" />
 
         <!--seq doesn't resolve nuget dependencies or do it incorreclty-->
         <file src="..\src\Seq.App.Teams.AdaptiveCard\bin\Release\netstandard2.0\AdaptiveCards.Templating.dll"                             target="lib\netstandard2.0\" />
