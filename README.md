@@ -18,6 +18,27 @@ ${Data.MessageTemplate} -> event.Data.MessageTemplate
 ${Data.Properties.SomeCustomProperty} -> event.Data.Properties["SomeCustomProperty"]
 ```
 
+Sample data file for `AdaptiveCard` designer:
+
+```json
+{
+  "EventType": 4294967295,
+  "TimestampUtc": "2020-01-22T18:19:59.1234567Z",
+  "Data": {
+    "Id": "some-other-id",
+    "LocalTimestamp": "2020-01-22T18:19:59.1234567+00:45",
+    "Level": 5,
+    "MessageTemplate": "template {message}",
+    "RenderedMessage": "rendered message",
+    "Exception": "exception\r\ndata",
+    "Properties": {
+      "YourCustomPropertyHere": "my value"
+    }
+  },
+  "Id": "event-id"
+}
+```
+
 ## Extra Links
 
 ### Configuration
