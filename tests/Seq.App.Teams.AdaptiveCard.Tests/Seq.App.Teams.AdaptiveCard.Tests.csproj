@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.NET.Test.Sdk" />
+        <PackageReference Include="NUnit3TestAdapter" />
+        <PackageReference Include="NUnit" />
+        <PackageReference Include="NUnit.Analyzers" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\src\Seq.App.Teams.AdaptiveCard\Seq.App.Teams.AdaptiveCard.csproj" />
+    </ItemGroup>
+
+</Project>

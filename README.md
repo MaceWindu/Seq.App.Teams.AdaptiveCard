@@ -1,19 +1,27 @@
-# Seq.App.Teams [![Build status](https://ci.appveyor.com/api/projects/status/yi1gi8fv9qjynm35?svg=true)](https://ci.appveyor.com/project/GAYAntoine/seq-app-teams) [![NuGet tag](https://img.shields.io/badge/nuget-Seq.App.Teams-blue.svg)](https://www.nuget.org/packages?q=Seq.App.Teams)
-Seq application for Microsoft Teams
+# Seq.App.Teams.AdaptiveCard [![Build Status](https://img.shields.io/azure-devops/build/adaptivecards/adaptivecards/1/master?label=build%20(master))](https://dev.azure.com/adaptivecards/adaptivecards/_build/latest?definitionId=1&branchName=master) [![NuGet](https://img.shields.io/nuget/v/Seq.App.Teams.AdaptiveCard.svg)](https://www.nuget.org/packages/Seq.App.Teams.AdaptiveCard/) [![License](https://img.shields.io/github/license/MaceWindu/Seq.App.Teams.AdaptiveCard)](LICENSE.txt)
 
-**Important note:** This Seq App packages require Seq 5.0 or later.
+Seq alerting application for Microsoft Teams with AdaptiveCard support. Based on [Seq.App.Teams](https://github.com/AntoineGa/Seq.App.Teams) application.
 
-# Installation
-For the Microsoft Teams Webhook to work you will need to put in the URL to your configured Incoming Webhook created in Microsoft Teams for your channel.
+## Notes
 
-# Note
-The models came from here: https://github.com/OfficeDev/BotBuilder-MicrosoftTeams and were modified slightly to include some missing properties (no known package exists with the full model layouts, come on Microsoft!).
+To connect application instance to Teams you need to provide Teams Webhook url. You can find required instructions [here](https://learn.microsoft.com/en-us/microsoftteams/platform/webhooks-and-connectors/how-to/add-incoming-webhook?tabs=dotnet).
 
-Additional note: As of 9/19/2019, for some reason you still cannot send AdaptiveCards, you need to use the older MessageCards with Teams Connectors.
+Because Teams currently doesn't support AdaptiveCard templating, it is done on application side using [AdaptiveCards.Templating](https://www.nuget.org/packages/AdaptiveCards.Templating) library.
 
-# Authors
-* Antoine [@AntoineGa](https://github.com/AntoineGa)
-* Matt Olson [@xantari](https://github.com/xantari)
+## Extra Links
 
-## Credits 
-Thanks to jsDeliver for their CDN services!
+### Configuration
+
+- [Teams: Create Incoming Webhooks](https://learn.microsoft.com/en-us/microsoftteams/platform/webhooks-and-connectors/how-to/add-incoming-webhook?tabs=dotnet). Provides instructions on Teams webhook creation
+
+### Dependencies
+
+- [AdaptiveCards.Templating repository](https://github.com/microsoft/AdaptiveCards). Use it for issue reports requests for templating engine
+- [AdaptiveExpressions repository](https://github.com/Microsoft/botbuilder-dotnet). Contains templating expressions evaluation engine sources
+
+### Templating language
+
+- [AdaptiveCard visual designer](https://adaptivecards.io/designer/). Note that `AdaptiveCards.Templating` library currently supports only `AdaptiveCard` 1.4
+- [Templating language reference](https://learn.microsoft.com/en-us/adaptive-cards/templating/language)
+- [List of built-in functions](https://learn.microsoft.com/en-us/azure/bot-service/adaptive-expressions/adaptive-expressions-prebuilt-functions?view=azure-bot-service-4.0#formatEpoch)
+- [Client-side templating](https://learn.microsoft.com/en-us/adaptive-cards/authoring-cards/text-features). Additional templating features (those are supported by Teams)

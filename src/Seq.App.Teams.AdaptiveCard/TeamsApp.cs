@@ -1,4 +1,5 @@
-﻿using Seq.App.Teams.Models;
+﻿using AdaptiveCards.Templating;
+using Seq.App.Teams.Models;
 using Seq.Apps;
 using Seq.Apps.LogEvents;
 using Serilog;
@@ -111,6 +112,14 @@ public sealed class TeamsApp : SeqApp, ISubscribeToAsync<LogEventData>
         HelpText = "If specified Teams card will be created only for the specified event levels, other levels will be discarded (useful for streaming events). Valid Values: Verbose,Debug,Information,Warning,Error,Fatal")]
     public string? LogEventLevels { get; set; }
 
+
+    [SeqAppSetting(
+    DisplayName = "AdaptiveCard template",
+    HelpText = "You can use AdaptiveCard designer at https://adaptivecards.io/designer/ to design your card",
+    InputType = SettingInputType.LongText,
+    IsOptional = true)]
+    public string? CardTemplate { get; set; }
+
     #endregion
 
     /// <inheritdoc />
@@ -158,9 +167,17 @@ public sealed class TeamsApp : SeqApp, ISubscribeToAsync<LogEventData>
 
             O365ConnectorCard body = BuildBody(evt);
             var bodyJson = JsonSerializer.Serialize(body, options: _serializationOptions);
+
+            var template = new AdaptiveCardTemplate(CardTemplate);
+            bodyJson = template.Expand(evt.Data);
+            var warnings = template.GetLastTemplateExpansionWarnings();
+            foreach (var warn in warnings)
+            {
+                _log.Warning("Teams template {Warning}", warn);
+            }
+            bodyJson = MessageBuilder.Wrap(bodyJson ?? "{}");
             using var content = new StringContent(bodyJson, Encoding.UTF8, "application/json");
-            var response = await client.PostAsync("", content)
-                .ConfigureAwait(false);
+            var response = await client.PostAsync("", content).ConfigureAwait(false);
 
             if (!response.IsSuccessStatusCode)
             {

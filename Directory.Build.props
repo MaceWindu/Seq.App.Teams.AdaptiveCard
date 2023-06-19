@@ -37,7 +37,5 @@
             <IncludeAssets>build; analyzers</IncludeAssets>
         </PackageReference>
 
-        <!--https://docs.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1509-->
-        <AdditionalFiles Include="$(MSBuildThisFileDirectory)/CodeMetricsConfig.txt" />
     </ItemGroup>
 </Project>
