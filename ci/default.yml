@@ -130,7 +130,7 @@ stages:
         command: 'push'
         packagesToPush: '$(Build.SourcesDirectory)/ci/Seq.App.Teams.AdaptiveCard.*.nupkg'
         nuGetFeedType: 'external'
-        publishFeedCredentials: 'Seq.App.Teams.AdaptiveCard at nuget.org'
+        publishFeedCredentials: 'nuget.org'
       displayName: Publish to Nuget.org
       condition: and(succeeded(), eq(variables['Build.SourceBranchName'], 'release'))
 
