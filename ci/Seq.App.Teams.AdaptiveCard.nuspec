@@ -13,6 +13,7 @@
         <projectUrl>https://github.com/MaceWindu/Seq.App.Teams.AdaptiveCard</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <readme>README.md</readme>
+        <icon>icon.png</icon>
 
         <dependencies>
             <group targetFramework=".NETStandard2.0">
@@ -23,6 +24,7 @@
     <files>
         <file src="..\LICENSE.txt" />
         <file src="..\README.md" />
+        <file src="icon.png" />
 
         <file src="..\src\Seq.App.Teams.AdaptiveCard\bin\Release\netstandard2.0\Seq.App.Teams.AdaptiveCard.pdb" target="lib\netstandard2.0\" />
         <file src="..\src\Seq.App.Teams.AdaptiveCard\bin\Release\netstandard2.0\Seq.App.Teams.AdaptiveCard.xml" target="lib\netstandard2.0\" />

@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace Seq.App.Teams;
 
-[SeqApp("Teams",
+[SeqApp("Teams (AdaptiveCard)",
 Description = "Sends events and notifications to Microsoft Teams.")]
 #pragma warning disable CA1001 // Types that own disposable fields should be disposable
 public sealed class TeamsApp : SeqApp, ISubscribeToAsync<LogEventData>
