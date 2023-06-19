@@ -113,15 +113,14 @@ stages:
         script: nuget.exe Pack $(Build.SourcesDirectory)\ci\Seq.App.Teams.AdaptiveCard.nuspec -OutputDirectory $(Build.SourcesDirectory)\built
         workingDirectory: $(Build.SourcesDirectory)/ci
       displayName: Build nuget for artifacts
-      #condition: and(succeeded(), ne(variables['Build.SourceBranchName'], 'release'))
-      condition: and(succeeded(), eq(variables['Build.SourceBranchName'], 'release'))
+      condition: and(succeeded(), ne(variables['Build.SourceBranchName'], 'release'))
 
     - task: CmdLine@2
       inputs:
         script: nuget.exe Pack $(Build.SourcesDirectory)\ci\Seq.App.Teams.AdaptiveCard.nuspec -OutputDirectory $(Build.SourcesDirectory)\built -Symbols -SymbolPackageFormat snupkg
         workingDirectory: $(Build.SourcesDirectory)/ci
       displayName: Build nuget for nuget.org
-      #condition: and(succeeded(), eq(variables['Build.SourceBranchName'], 'release'))
+      condition: and(succeeded(), eq(variables['Build.SourceBranchName'], 'release'))
 
     - task: PublishBuildArtifacts@1
       inputs:
