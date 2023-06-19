@@ -1,4 +1,4 @@
-# Seq.App.Teams.AdaptiveCard [![Build Status](https://img.shields.io/azure-devops/build/adaptivecards/adaptivecards/1/master?label=build%20(master))](https://dev.azure.com/adaptivecards/adaptivecards/_build/latest?definitionId=1&branchName=master) [![NuGet](https://img.shields.io/nuget/v/Seq.App.Teams.AdaptiveCard.svg)](https://www.nuget.org/packages/Seq.App.Teams.AdaptiveCard/) [![License](https://img.shields.io/github/license/MaceWindu/Seq.App.Teams.AdaptiveCard)](LICENSE.txt)
+# Seq.App.Teams.AdaptiveCard [![Build Status](https://img.shields.io/azure-devops/build/macewindu/projects/2/master?label=build%20(master))](https://dev.azure.com/macewindu/projects/_build/latest?definitionId=2&branchName=master) [![NuGet](https://img.shields.io/nuget/v/Seq.App.Teams.AdaptiveCard.svg)](https://www.nuget.org/packages/Seq.App.Teams.AdaptiveCard/) [![License](https://img.shields.io/github/license/MaceWindu/Seq.App.Teams.AdaptiveCard)](LICENSE.txt)
 
 Seq alerting application for Microsoft Teams with AdaptiveCard support. Based on [Seq.App.Teams](https://github.com/AntoineGa/Seq.App.Teams) application.
 

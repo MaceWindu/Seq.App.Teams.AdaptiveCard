@@ -121,7 +121,7 @@ stages:
         command: 'push'
         packagesToPush: '$(Build.SourcesDirectory)/ci/Seq.App.Teams.AdaptiveCard.*.nupkg'
         nuGetFeedType: 'internal'
-        publishVstsFeed: 'Seq.App.Teams.AdaptiveCard/Seq.App.Teams.AdaptiveCard'
+        publishVstsFeed: 'macewindu/Seq.App.Teams.AdaptiveCard'
       displayName: Publish to Azure Artifacts feed
       condition: and(succeeded(), eq(variables['Build.SourceBranchName'], 'master'))
 
