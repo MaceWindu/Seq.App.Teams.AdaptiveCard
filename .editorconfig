@@ -116,3 +116,5 @@ dotnet_naming_rule.rule_for_fields.style = style_underscore_camel_case
 dotnet_naming_rule.rule_for_fields.symbols = symbols_parameters
 dotnet_naming_rule.rule_for_fields.style = style_camel_case
 ####################################################################################
+
+dotnet_diagnostic.NUnit2045.severity = none # NUnit2045: Use Assert.Multiple

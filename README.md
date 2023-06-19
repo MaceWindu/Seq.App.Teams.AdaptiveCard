@@ -8,6 +8,16 @@ To connect application instance to Teams you need to provide Teams Webhook url. 
 
 Because Teams currently doesn't support AdaptiveCard templating, it is done on application side using [AdaptiveCards.Templating](https://www.nuget.org/packages/AdaptiveCards.Templating) library.
 
+## Context
+
+Context type has [Event](https://github.com/datalust/seq-apps-runtime/blob/dev/src/Seq.Apps/Apps/Event.cs)`<`[LogEventData](https://github.com/datalust/seq-apps-runtime/blob/dev/src/Seq.Apps/Apps/LogEvents/LogEventData.cs)`>` type and it's properties could be referenced from template using their names:
+
+```
+${Id} -> event.Id
+${Data.MessageTemplate} -> event.Data.MessageTemplate
+${Data.Properties.SomeCustomProperty} -> event.Data.Properties["SomeCustomProperty"]
+```
+
 ## Extra Links
 
 ### Configuration

@@ -169,7 +169,7 @@ public sealed class TeamsApp : SeqApp, ISubscribeToAsync<LogEventData>
             var bodyJson = JsonSerializer.Serialize(body, options: _serializationOptions);
 
             var template = new AdaptiveCardTemplate(CardTemplate);
-            bodyJson = template.Expand(evt.Data);
+            bodyJson = template.Expand(evt);
             var warnings = template.GetLastTemplateExpansionWarnings();
             foreach (var warn in warnings)
             {
