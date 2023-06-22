@@ -13,6 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".root", ".root", "{D2DDC05F
 		Directory.Build.props = Directory.Build.props
 		Directory.Packages.props = Directory.Packages.props
 		LICENSE.txt = LICENSE.txt
+		nuget.config = nuget.config
 		README.md = README.md
 	EndProjectSection
 EndProject
@@ -46,7 +47,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {45F4DD2D-CE5F-4FAA-8968-D04D1273476B}
 		        SolutionGuid = {34F2739E-EFC9-4753-9EB3-CF2A94B9D9C3}
+		SolutionGuid = {45F4DD2D-CE5F-4FAA-8968-D04D1273476B}
 	EndGlobalSection
 EndGlobal

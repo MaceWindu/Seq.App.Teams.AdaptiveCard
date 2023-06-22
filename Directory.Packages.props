@@ -1,7 +1,6 @@
 <Project>
     <ItemGroup>
         <PackageVersion Include="Seq.Apps" Version="2021.4.0" />
-        <PackageVersion Include="System.Text.Json" Version="7.0.3" />
         <PackageVersion Include="AdaptiveCards.Templating" Version="1.4.0" />
         <PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />
         

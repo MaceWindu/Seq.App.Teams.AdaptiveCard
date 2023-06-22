@@ -15,11 +15,19 @@
         <DebugSymbols>true</DebugSymbols>
     </PropertyGroup>
 
+
+    <ItemGroup>
+      <None Remove="Resources\default-template.json" />
+    </ItemGroup>
+
+
+    <ItemGroup>
+      <EmbeddedResource Include="Resources\default-template.json" />
+    </ItemGroup>
+
     <ItemGroup>
         <PackageReference Include="Seq.Apps" />
         <PackageReference Include="AdaptiveCards.Templating" />
-        <PackageReference Include="System.Text.Json" />
-        <PackageReference Include="Newtonsoft.Json" />
 
         <PackageReference Include="PolySharp" />
         <PackageReference Include="Microsoft.SourceLink.GitHub">

@@ -12,7 +12,9 @@
         <WarningLevel>9999</WarningLevel>
         <ErrorReport>prompt</ErrorReport>
         <AccelerateBuildsInVisualStudio>true</AccelerateBuildsInVisualStudio>
+
         <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+        <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
 
         <RunAnalyzersDuringBuild>true</RunAnalyzersDuringBuild>
         <RunAnalyzersDuringLiveAnalysis>true</RunAnalyzersDuringLiveAnalysis>
