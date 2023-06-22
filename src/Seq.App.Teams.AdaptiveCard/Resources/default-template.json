@@ -59,7 +59,7 @@
                     "type": "Action.OpenUrl",
                     "$when": "${not(or(equals(EventType,2716299264),equals(EventType,2716299265)))}",
                     "title": "View Event in Seq",
-                    "url": "${BaseUri}#/events?filter=@Id%20%3D%20'${Id}'&amp;show=expanded"
+                    "url": "${BaseUri}#/events?filter=@Id%3D'${Id}'&show=expanded"
                 }
             ]
         }
