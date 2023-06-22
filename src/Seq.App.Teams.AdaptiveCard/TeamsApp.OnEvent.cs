@@ -28,9 +28,7 @@ public sealed partial class TeamsApp
 
     private HttpClientHandler _httpClientHandler = default!;
 
-#pragma warning disable CA1859 // Use concrete types when possible for improved performance
     private Payload BuildPayload(Event<LogEventData> evt)
-#pragma warning restore CA1859 // Use concrete types when possible for improved performance
     {
         var data = new Payload(
             evt.Id,
@@ -46,7 +44,7 @@ App.Title,
             Host.BaseUri
         );
 
-        _log.Information("Palyload {json}", JsonConvert.ToString(data));
+        _log.Information("Palyload {json}", JsonConvert.SerializeObject(data));
 
         return data;
     }
