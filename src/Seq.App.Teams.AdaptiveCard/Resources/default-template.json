@@ -19,7 +19,7 @@
         },
         {
             "type": "TextBlock",
-            "text": "{{DATE(${formatDateTime(TimeStamp,'YYYY-MM-DDTHH:mm:ssZ')}, SHORT)}} {{TIME(${formatDateTime(TimeStamp,'YYYY-MM-DDTHH:mm:ssZ')})}}",
+            "text": "{{DATE(${formatDateTime(TimeStamp,'yyyy-MM-ddTHH:mm:ssZ','')},SHORT)}} {{TIME(${formatDateTime(TimeStamp,'yyyy-MM-ddTHH:mm:ssZ','')})}}",
             "wrap": true,
             "color": "Attention"
         },
