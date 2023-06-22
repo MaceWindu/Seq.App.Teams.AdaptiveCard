@@ -33,7 +33,7 @@ public sealed partial class TeamsApp
         var data = new Payload(
             evt.Id,
             evt.TimestampUtc.ToString("O"),
-            evt.Data.Level,
+            evt.Data.Level.ToString(),
             evt.Data.MessageTemplate,
             evt.Data.RenderedMessage,
             evt.Data.Exception,

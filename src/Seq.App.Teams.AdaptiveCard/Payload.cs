@@ -1,14 +1,13 @@
-﻿using Seq.Apps.LogEvents;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Seq.App.Teams;
 
 internal sealed record Payload(
     string Id,
     string TimeStamp,
-    LogEventLevel Level,
+    string Level,
     string MessageTemplate,
-    string RenderedMessage,
+    string Message,
     string Exception,
     IReadOnlyDictionary<string, object> Properties,
     uint EventType,

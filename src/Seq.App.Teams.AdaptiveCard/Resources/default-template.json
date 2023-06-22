@@ -1,0 +1,67 @@
+{
+    "type": "AdaptiveCard",
+    "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+    "version": "1.4",
+    "body": [
+        {
+            "type": "Container",
+            "backgroundImage": "${if(Level='Fatal','data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAMSURBVBhXY1BSUgIAANAAZ+lxJ0oAAAAASUVORK5CYII=',if(Level='Error','data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAMSURBVBhXY5gkbQMAAiwA6pD4pbEAAAAASUVORK5CYII=',if(Level='Warning','data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAMSURBVBhXY/i/3QMABLcB/z7vHnUAAAAASUVORK5CYII=',if(Level='Information','data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAMSURBVBhXY2DMXQkAAYoBGGHzUJ4AAAAASUVORK5CYII=','data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAMSURBVBhXYygvLwcAAs4BZpqApbgAAAAASUVORK5CYII='))))}",
+            "items": [
+                {
+                    "type": "TextBlock",
+                    "text": "${Level}",
+                    "wrap": true,
+                    "size": "extraLarge",
+                    "weight": "bolder",
+                    "color": "${if(Level='Warning', 'default', 'light')}"
+                }
+            ]
+        },
+        {
+            "type": "TextBlock",
+            "text": "{{DATE(${formatDateTime(TimeStamp,'YYYY-MM-DDTHH:mm:ssZ')}, SHORT)}} {{TIME(${formatDateTime(TimeStamp,'YYYY-MM-DDTHH:mm:ssZ')})}}",
+            "wrap": true,
+            "color": "Attention"
+        },
+        {
+            "type": "Container",
+            "$when": "${not(or(EventType=2716299264,EventType=2716299265))}",
+            "items": [
+                {
+                    "type": "TextBlock",
+                    "text": "${Message}",
+                    "wrap": true,
+                    "weight": "Bolder"
+                },
+                {
+                    "type": "TextBlock",
+                    "$data": "${indicesAndValues(Properties)}",
+                    "text": "${index}: ${value}",
+                    "wrap": true
+                },
+                {
+                    "type": "TextBlock",
+                    "$when": "${exists(Exception)}",
+                    "text": "${Exception}",
+                    "wrap": true
+                }
+            ]
+        },
+        {
+            "type": "ActionSet",
+            "actions": [
+                {
+                    "type": "Action.OpenUrl",
+                    "title": "Open Seq",
+                    "url": "${BaseUri}"
+                },
+                {
+                    "type": "Action.OpenUrl",
+                    "$when": "${not(or(EventType=2716299264,EventType=2716299265))}",
+                    "title": "View Event in Seq",
+                    "url": "${BaseUri}#/events?filter=@Id%20%3D%20'${Id}'&amp;show=expanded"
+                }
+            ]
+        }
+    ]
+}

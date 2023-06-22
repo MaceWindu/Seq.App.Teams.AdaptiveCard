@@ -18,24 +18,74 @@ ${Data.MessageTemplate} -> event.Data.MessageTemplate
 ${Data.Properties.SomeCustomProperty} -> event.Data.Properties["SomeCustomProperty"]
 ```
 
-Sample data file for `AdaptiveCard` designer:
+### Payload Examples
+
+Those examples could be used with `AdaptiveCard` designer.
+
+#### Event Payload
 
 ```json
 {
-  "EventType": 4294967295,
-  "TimestampUtc": "2020-01-22T18:19:59.1234567Z",
-  "Data": {
-    "Id": "some-other-id",
-    "LocalTimestamp": "2020-01-22T18:19:59.1234567+00:45",
-    "Level": 5,
-    "MessageTemplate": "template {message}",
-    "RenderedMessage": "rendered message",
-    "Exception": "exception\r\ndata",
+    "Id": "event-4f3bb930732008db0733010000000000",
+    "TimeStamp": "2023-06-22T12:58:00.8518960Z",
+    "Level": "Warning",
+    "MessageTemplate": "Some event {@data}",
+    "Message": "Some event 123",
+    "Exception": null,
     "Properties": {
-      "YourCustomPropertyHere": "my value"
-    }
-  },
-  "Id": "event-id"
+        "#ProcessID": 11860,
+        "#ThreadID": 88
+    },
+    "EventType": 2739387145,
+    "AppTitle": "teams app",
+    "InstanceName": "",
+    "BaseUri": "http://localhost:80"
+}
+```
+
+#### Alert Payload
+
+```json
+{
+    "Id": "event-988d8be0732108db0000000000000000",
+    "TimeStamp": "2023-06-22T13:07:13.3585376Z",
+    "Level": "Warning",
+    "MessageTemplate": "Alert condition triggered by {NamespacedAlertTitle}",
+    "Message": "Alert condition triggered by \"admin/New Alert\"",
+    "Exception": null,
+    "Properties": {
+        "NamespacedAlertTitle": "admin/New Alert",
+        "Alert": {
+            "Id": "alert-463",
+            "Title": "New Alert",
+            "Url": "http://localhost:80/#/alerts/alert-463",
+            "OwnerUsername": "admin",
+            "SignalExpressionDescription": null,
+            "Query": "select count(*) as count from stream group by time(1m) having count > 0 limit 100 for background",
+            "HavingClause": "count > 0",
+            "TimeGrouping": "1 minute"
+        },
+        "Source": {
+            "RangeStart": "2023-06-22T13:05:43.3585376Z",
+            "RangeEnd": "2023-06-22T13:06:43.3585376Z",
+            "ResultsUrl": "http://localhost:80/#/events?q=select%20count%28%2A%29%20as%20count%20from%20stream%20group%20by%20time%281m%29%20having%20count%20%3E%200%20limit%20100%20for%20background&from=2023-06-22T13:05:43.3585376Z&to=2023-06-22T13:06:43.3585376Z",
+            "Results": [
+                [ "time", "count" ],
+                [ "2023-06-22T13:05:43.3585376Z", 19 ]
+            ],
+            "ContributingEvents": [
+                [ "id", "timestamp", "message" ],
+                [ "event-6d291458732108db9333010000000000", "2023-06-22T13:06:00.5580888Z", "event message 1" ],
+                [ "event-6d291458732108db9433010000000000", "2023-06-22T13:06:00.5580888Z", "event message 2" ]
+            ]
+        },
+        "SuppressedUntil": "2023-06-22T13:08:13.3585376Z",
+        "Failures": null
+    },
+    "EventType": 2716299265,
+    "AppTitle": "teams app",
+    "InstanceName": "",
+    "BaseUri": "http://localhost:80"
 }
 ```
 
