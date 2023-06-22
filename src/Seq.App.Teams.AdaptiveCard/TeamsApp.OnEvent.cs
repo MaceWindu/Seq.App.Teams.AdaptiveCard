@@ -41,8 +41,7 @@ public sealed partial class TeamsApp
             evt.EventType,
             App.Title,
             Host.InstanceName,
-            Host.BaseUri
-        );
+            Host.BaseUri);
 
         _log.Information("Palyload {json}", JsonConvert.SerializeObject(data));
 

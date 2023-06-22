@@ -2,7 +2,7 @@
 
 namespace Seq.App.Teams;
 
-internal sealed record Payload(
+public sealed record Payload(
     string Id,
     string TimeStamp,
     string Level,
