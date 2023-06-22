@@ -32,14 +32,14 @@ public sealed partial class TeamsApp
     {
         var data = new Payload(
             evt.Id,
-evt.Data.LocalTimestamp.ToUnixTimeMilliseconds(),
+            evt.TimestampUtc.ToString("O"),
             evt.Data.Level,
             evt.Data.MessageTemplate,
             evt.Data.RenderedMessage,
             evt.Data.Exception,
             evt.Data.Properties,
             evt.EventType,
-App.Title,
+            App.Title,
             Host.InstanceName,
             Host.BaseUri
         );

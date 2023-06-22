@@ -5,7 +5,7 @@ namespace Seq.App.Teams;
 
 internal sealed record Payload(
     string Id,
-    long TimeStamp,
+    string TimeStamp,
     LogEventLevel Level,
     string MessageTemplate,
     string RenderedMessage,
