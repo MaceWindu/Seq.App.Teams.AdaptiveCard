@@ -73,7 +73,7 @@
                             "columns": [
                                 {
                                     "type": "Column",
-                                    "$data": "${indicesAndValues(Properties.Source.Results[0])}",
+                                    "$data": "${if(exists(Properties.Source.Results), indicesAndValues(Properties.Source.Results[0]), null)}",
                                     "width": "stretch",
                                     "items": [
                                         {
@@ -90,7 +90,7 @@
                             "columns": [
                                 {
                                     "type": "Column",
-                                    "$data": "${indicesAndValues(skip(Properties.Source.Results, 1))}",
+                                    "$data": "${if(exists(Properties.Source.Results), indicesAndValues(skip(Properties.Source.Results, 1)), null)}",
                                     "width": "stretch",
                                     "items": [
                                         {
@@ -147,7 +147,7 @@
                         },
                         {
                             "type": "ColumnSet",
-                            "$data": "${skip(Properties.Source.ContributingEvents, 1)}",
+                            "$data": "${if(exists(Properties.Source.ContributingEvents), skip(Properties.Source.ContributingEvents, 1), null)}",
                             "columns": [
                                 {
                                     "type": "Column",
