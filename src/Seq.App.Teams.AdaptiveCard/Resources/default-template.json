@@ -34,10 +34,14 @@
                     "wrap": true
                 },
                 {
-                    "type": "TextBlock",
+                    "type": "FactSet",
                     "$data": "${indicesAndValues(Properties)}",
-                    "text": "**${index}**: ${value}",
-                    "wrap": true
+                    "facts": [
+                        {
+                            "title": "**${index}**",
+                            "value": "${Value}"
+                        }
+                    ]
                 },
                 {
                     "type": "TextBlock",
@@ -69,22 +73,12 @@
                             "columns": [
                                 {
                                     "type": "Column",
+                                    "$data": "${indicesAndValues(Properties.Source.Results[0])}",
                                     "width": "stretch",
                                     "items": [
                                         {
                                             "type": "TextBlock",
-                                            "text": "**Time**",
-                                            "wrap": true
-                                        }
-                                    ]
-                                },
-                                {
-                                    "type": "Column",
-                                    "width": "stretch",
-                                    "items": [
-                                        {
-                                            "type": "TextBlock",
-                                            "text": "**Count**",
+                                            "text": "**${value}**",
                                             "wrap": true
                                         }
                                     ]
@@ -96,28 +90,17 @@
                             "columns": [
                                 {
                                     "type": "Column",
+                                    "$data": "${indicesAndValues(skip(Properties.Source.Results, 1))}",
                                     "width": "stretch",
                                     "items": [
                                         {
                                             "type": "TextBlock",
-                                            "text": "${$data[0]}",
-                                            "wrap": true
-                                        }
-                                    ]
-                                },
-                                {
-                                    "type": "Column",
-                                    "width": "stretch",
-                                    "items": [
-                                        {
-                                            "type": "TextBlock",
-                                            "text": "${$data[1]}",
+                                            "text": "${value}",
                                             "wrap": true
                                         }
                                     ]
                                 }
-                            ],
-                            "$data": "${Properties.Source.Result}"
+                            ]
                         },
                         {
                             "type": "TextBlock",
@@ -164,6 +147,7 @@
                         },
                         {
                             "type": "ColumnSet",
+                            "$data": "${skip(Properties.Source.ContributingEvents, 1)}",
                             "columns": [
                                 {
                                     "type": "Column",
@@ -171,7 +155,7 @@
                                     "items": [
                                         {
                                             "type": "TextBlock",
-                                            "text": "[${$data[1]}](${BaseUri}#/events?filter=@Id%3D'${$data[0]}'&show=expanded)",
+                                            "text": "[${$data[1]}](${$root.BaseUri}#/events?filter=@Id%3D'${$data[0]}'&show=expanded)",
                                             "wrap": true
                                         }
                                     ]
