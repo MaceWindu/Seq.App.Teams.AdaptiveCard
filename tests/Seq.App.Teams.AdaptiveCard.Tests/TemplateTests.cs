@@ -212,4 +212,22 @@ data",
         Assert.That(result.Count(c => c == '$'), Is.EqualTo(1));
         Assert.That(result, Is.EqualTo(/*lang=json,strict*/ @"{""type"":""AdaptiveCard"",""$schema"":""http://adaptivecards.io/schemas/adaptive-card.json"",""version"":""1.4"",""body"":[{""type"":""Container"",""backgroundImage"":{""url"":""data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAMSURBVBhXY1BSUgIAANAAZ+lxJ0oAAAAASUVORK5CYII=""},""items"":[{""type"":""TextBlock"",""text"":""**Fatal**"",""wrap"":true,""size"":""ExtraLarge"",""color"":""light""}]},{""type"":""TextBlock"",""text"":""{{DATE(2020-01-22T18:19:59Z,SHORT)}} {{TIME(2020-01-22T18:19:59Z)}}"",""wrap"":true,""color"":""Attention""},{""type"":""Container"",""items"":[{""type"":""TextBlock"",""text"":""Alert condition triggered by [Alert/Name](Alert.Url)"",""wrap"":true}]},{""type"":""ColumnSet"",""columns"":[{""type"":""Column"",""width"":""stretch"",""items"":[{""type"":""ActionSet"",""actions"":[]}]},{""type"":""Column"",""width"":""stretch"",""items"":[{""type"":""ActionSet"",""actions"":[{""type"":""Action.OpenUrl"",""title"":""Open Seq"",""url"":""http://localhost""}],""horizontalAlignment"":""Right""}]}]}]}"));
     }
+
+    [Test, Explicit]
+    public void Debug()
+    {
+        //var data = @"TODO";
+        var data = @"TODO";
+
+        using var stream = typeof(TeamsApp).Assembly.GetManifestResourceStream("Seq.App.Teams.AdaptiveCard.Resources.default-template.json")!;
+        using var reader = new StreamReader(stream);
+        var template = reader.ReadToEnd();
+
+        var tmpl = new AdaptiveCardTemplate(template);
+        var result = tmpl.Expand(data);
+        var errors = tmpl.GetLastTemplateExpansionWarnings();
+
+        Assert.That(errors, Is.Empty);
+        Assert.That(result.Count(c => c == '$'), Is.EqualTo(1));
+    }
 }
