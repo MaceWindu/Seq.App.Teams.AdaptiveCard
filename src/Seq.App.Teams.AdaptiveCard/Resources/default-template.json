@@ -39,7 +39,7 @@
                     "facts": [
                         {
                             "title": "**${index}**",
-                            "value": "${Value}"
+                            "value": "${if(exists(value), value, '')}"
                         }
                     ]
                 },

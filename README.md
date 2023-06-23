@@ -102,7 +102,7 @@ Those examples could be used with `AdaptiveCard` designer.
 
 ### Templating language
 
-- [AdaptiveCard visual designer](https://adaptivecards.io/designer/). Note that `AdaptiveCards.Templating` library currently supports only `AdaptiveCard` 1.4
+- [AdaptiveCard visual designer](https://adaptivecards.io/designer/)
 - [Templating language reference](https://learn.microsoft.com/en-us/adaptive-cards/templating/language)
 - [List of built-in functions](https://learn.microsoft.com/en-us/azure/bot-service/adaptive-expressions/adaptive-expressions-prebuilt-functions?view=azure-bot-service-4.0#formatEpoch)
 - [Client-side templating](https://learn.microsoft.com/en-us/adaptive-cards/authoring-cards/text-features). Additional templating features (those are supported by Teams)
