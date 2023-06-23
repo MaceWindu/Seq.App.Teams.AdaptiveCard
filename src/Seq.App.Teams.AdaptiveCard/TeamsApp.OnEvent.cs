@@ -43,7 +43,7 @@ public sealed partial class TeamsApp
             Host.InstanceName,
             Host.BaseUri);
 
-        _log.Information("Palyload {json}", JsonConvert.SerializeObject(data));
+        _log.Information("Payload {json}", JsonConvert.SerializeObject(data));
 
         return data;
     }
@@ -98,6 +98,8 @@ public sealed partial class TeamsApp
 
             var template = new AdaptiveCardTemplate(string.IsNullOrWhiteSpace(CardTemplate) ? _defaultTemplate : CardTemplate);
             var bodyJson = template.Expand(BuildPayload(evt));
+
+            _log.Information("ActionCard {json}", bodyJson);
 
             var warnings = template.GetLastTemplateExpansionWarnings();
             foreach (var warn in warnings)
