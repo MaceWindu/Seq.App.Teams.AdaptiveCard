@@ -5,51 +5,39 @@ namespace Seq.App.Teams;
 public sealed partial class TeamsApp
 {
     [SeqAppSetting(
-        DisplayName = "Web proxy",
-        HelpText = "When a web proxy is present in the network for connecting to outside URLs.",
-        IsOptional = true)]
-    public string? WebProxy { get; set; }
-
-    [SeqAppSetting(
-        DisplayName = "Web proxy user name",
-        HelpText = "Proxy user name, if authorization required",
-        IsOptional = true)]
-    public string? WebProxyUserName { get; set; }
-
-    [SeqAppSetting(
-        DisplayName = "Web proxy password",
-        HelpText = "Proxy password, if authorization required",
-        IsOptional = true,
-        InputType = SettingInputType.Password)]
-    public string? WebProxyPassword { get; set; }
-
-    [SeqAppSetting(
         DisplayName = "Teams WebHook URL",
         HelpText = "Used to send message to Teams. This can be retrieved by adding a Incoming Webhook connector to your Teams channel.")]
     public string? TeamsBaseUrl { get; set; }
 
     [SeqAppSetting(
-        DisplayName = "Trace All Messages",
-        HelpText = "Used to show all messages to trace; note that this will cause the Teams Webhook URL to appear in diagnostic messages.",
+        DisplayName = "Proxy Server",
+        HelpText = "Address of proxy server for WebHook connection.",
         IsOptional = true)]
-    public bool TraceMessage { get; set; }
+    public string? WebProxy { get; set; }
 
     [SeqAppSetting(
-        DisplayName = "Properties to exclude",
-        HelpText = "The properties that will be excluded from the messages. Use '" + ExcludeAllPropertyName + "' to exclude all Seq properties. Multiple properties can be specified; enter one per line.",
+        DisplayName = "Proxy user name",
+        HelpText = "Proxy server user name",
         IsOptional = true)]
-    public string? ExcludedProperties { get; set; }
+    public string? WebProxyUserName { get; set; }
 
     [SeqAppSetting(
-        DisplayName = "Color",
-        HelpText = "Hex theme color for messages (ex. ff0000). (default: auto based on message level)",
-        IsOptional = true)]
-    public string? Color { get; set; }
-
-    [SeqAppSetting(
-        DisplayName = "Comma seperated list of event levels",
+        DisplayName = "Proxy password",
+        HelpText = "Proxy server password",
         IsOptional = true,
-        HelpText = "If specified Teams card will be created only for the specified event levels, other levels will be discarded (useful for streaming events). Valid Values: Verbose,Debug,Information,Warning,Error,Fatal")]
+        InputType = SettingInputType.Password)]
+    public string? WebProxyPassword { get; set; }
+
+    [SeqAppSetting(
+        DisplayName = "Enable Trace Logs",
+        HelpText = "Log trace/debug messages.",
+        IsOptional = true)]
+    public bool TraceEnabled { get; set; }
+
+    [SeqAppSetting(
+        DisplayName = "Log only specified event levels",
+        IsOptional = true,
+        HelpText = "When set, only events with specified levels are sent to Teams. Valid Values: Verbose,Debug,Information,Warning,Error,Fatal (comma-separated)")]
     public string? LogEventLevels { get; set; }
 
 

@@ -9,7 +9,7 @@ public sealed partial class TeamsApp
     /// <inheritdoc />
     protected override void OnAttached()
     {
-        _log = TraceMessage ? Log.ForContext("Uri", TeamsBaseUrl) : Log;
+        _log = Log.ForContext("Seq.App", App.Title);
 
         _httpClientHandler = new HttpClientHandler();
         if (!string.IsNullOrEmpty(WebProxy))

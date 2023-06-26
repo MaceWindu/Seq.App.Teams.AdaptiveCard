@@ -11,37 +11,38 @@ namespace Seq.App.Teams;
 public sealed partial class TeamsApp : SeqApp, ISubscribeToAsync<LogEventData>
 #pragma warning restore CA1001 // Types that own disposable fields should be disposable
 {
-    private const string ExcludeAllPropertyName = "All";
-
     private ILogger _log = default!;
     private string _defaultTemplate = default!;
+    private HashSet<LogEventLevel>? _loggedLevels;
 
 
     private HashSet<LogEventLevel> LogEventLevelList
     {
         get
         {
-            var result = new HashSet<LogEventLevel>();
-            if (string.IsNullOrEmpty(LogEventLevels))
+            if (_loggedLevels == null)
             {
-                return result;
-            }
-
-            var strValues = LogEventLevels!.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-            if (!(strValues?.Length > 0))
-            {
-                return result;
-            }
-
-            foreach (var strValue in strValues)
-            {
-                if (Enum.TryParse(strValue, out LogEventLevel enumValue))
+                var result = new HashSet<LogEventLevel>();
+                if (!string.IsNullOrEmpty(LogEventLevels))
                 {
-                    _ = result.Add(enumValue);
+
+                    var strValues = LogEventLevels!.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                    if (strValues?.Length > 0)
+                    {
+                        foreach (var strValue in strValues)
+                        {
+                            if (Enum.TryParse(strValue, out LogEventLevel enumValue))
+                            {
+                                _ = result.Add(enumValue);
+                            }
+                        }
+                    }
                 }
+
+                _loggedLevels = result;
             }
 
-            return result;
+            return _loggedLevels;
         }
     }
 }

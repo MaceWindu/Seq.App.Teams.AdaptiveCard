@@ -43,7 +43,10 @@ public sealed partial class TeamsApp
             Host.InstanceName,
             Host.BaseUri);
 
-        _log.Information("Payload {json}", JsonConvert.SerializeObject(data));
+        if (TraceEnabled)
+        {
+            _log.Information("Template data: {json}", JsonConvert.SerializeObject(data));
+        }
 
         return data;
     }
@@ -73,7 +76,7 @@ public sealed partial class TeamsApp
         }
         else
         {
-            if (TraceMessage)
+            if (TraceEnabled)
             {
                 var responseResult = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                 _log.Information("Server replied {StatusCode} {StatusMessage}: {Message}", response.StatusCode, (int)response.StatusCode, responseResult);
@@ -86,25 +89,23 @@ public sealed partial class TeamsApp
         try
         {
             //If the event level is defined and it is not in the list do not log it
-            if (LogEventLevelList?.Count > 0 && !LogEventLevelList.Contains(evt.Data.Level))
+            if (LogEventLevelList.Count > 0 && !LogEventLevelList.Contains(evt.Data.Level))
             {
                 return;
-            }
-
-            if (TraceMessage)
-            {
-                _log.Information("Start Processing {Message}", evt.Data.RenderedMessage);
             }
 
             var template = new AdaptiveCardTemplate(string.IsNullOrWhiteSpace(CardTemplate) ? _defaultTemplate : CardTemplate);
             var bodyJson = template.Expand(BuildPayload(evt));
 
-            _log.Information("ActionCard {json}", bodyJson);
+            if (TraceEnabled)
+            {
+                _log.Information("ActionCard: {json}", bodyJson);
+            }
 
             var warnings = template.GetLastTemplateExpansionWarnings();
             foreach (var warn in warnings)
             {
-                _log.Warning("Teams template {Warning}", warn);
+                _log.Warning("AdaptiveCard template warning: {Warning}", warn);
             }
 
             await SendCart(bodyJson).ConfigureAwait(false);
