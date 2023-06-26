@@ -1,0 +1,120 @@
+root = true
+
+[*]
+indent_style = space
+indent_size = 4
+end_of_line = crlf
+insert_final_newline = false
+
+[*.cs]
+dotnet_analyzer_diagnostic.severity = error
+dotnet_code_quality.api_surface = all
+
+dotnet_diagnostic.CA1002.severity = none # CA1002: Do not expose generic lists
+dotnet_code_quality.CA1002.api_surface = public,internal
+
+
+dotnet_diagnostic.CA1031.severity = none # CA1031: Do not catch general exception types
+
+dotnet_diagnostic.CA1054.severity = none # CA1054: URI parameters should not be strings
+dotnet_code_quality.CA1054.api_surface = all
+
+dotnet_diagnostic.CA1056.severity = none # CA1056: URI properties should not be strings
+dotnet_code_quality.CA1056.api_surface = all
+
+
+dotnet_diagnostic.CA1062.severity = none # CA1062: Validate arguments of public methods
+dotnet_code_quality.CA1062.api_surface = all
+
+dotnet_diagnostic.CA1707.severity = none # CA1707: Identifiers should not contain underscores
+dotnet_code_quality.CA1707.api_surface = all
+
+
+dotnet_diagnostic.CA2227.severity = none # CA2227: Collection properties should be read only
+
+dotnet_diagnostic.IDE0008.severity = error # 'var' preferences
+csharp_style_var_elsewhere = true
+csharp_style_var_for_built_in_types = true
+csharp_style_var_when_type_is_apparent = true
+dotnet_diagnostic.IDE0130.severity = none # Namespace doesn't match folder structure
+dotnet_diagnostic.IDE0160.severity = none # Use block-scoped namespace
+dotnet_diagnostic.IDE0161.severity = error # Use file-scoped namespace
+
+####################################################################################
+# naming rules
+# https://docs.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/naming-rules
+
+dotnet_diagnostic.IDE1006.severity = error # Naming rule violation
+
+# styles
+dotnet_naming_style.style_pascal_case.capitalization = pascal_case
+dotnet_naming_style.style_pascal_case.required_suffix = 
+dotnet_naming_style.style_pascal_case.required_prefix = 
+dotnet_naming_style.style_pascal_case.word_separator = 
+
+dotnet_naming_style.style_i_pascal_case.capitalization = pascal_case
+dotnet_naming_style.style_i_pascal_case.required_suffix = 
+dotnet_naming_style.style_i_pascal_case.required_prefix = I
+dotnet_naming_style.style_i_pascal_case.word_separator = 
+
+dotnet_naming_style.style_t_pascal_case.capitalization = pascal_case
+dotnet_naming_style.style_t_pascal_case.required_suffix = 
+dotnet_naming_style.style_t_pascal_case.required_prefix = T
+dotnet_naming_style.style_t_pascal_case.word_separator = 
+
+dotnet_naming_style.style_all_caps.capitalization = all_upper
+dotnet_naming_style.style_all_caps.required_suffix = 
+dotnet_naming_style.style_all_caps.required_prefix = 
+dotnet_naming_style.style_all_caps.word_separator = _
+
+dotnet_naming_style.style_underscore_camel_case.capitalization = camel_case
+dotnet_naming_style.style_underscore_camel_case.required_suffix = 
+dotnet_naming_style.style_underscore_camel_case.required_prefix = _
+dotnet_naming_style.style_underscore_camel_case.word_separator = 
+
+dotnet_naming_style.style_camel_case.capitalization = camel_case
+dotnet_naming_style.style_camel_case.required_suffix = 
+dotnet_naming_style.style_camel_case.required_prefix = 
+dotnet_naming_style.style_camel_case.word_separator = 
+
+# symbols
+dotnet_naming_symbols.symbols_allways_pascal_case.applicable_kinds = namespace,class,struct,enum,property,method,event,delegate
+dotnet_naming_symbols.symbols_allways_pascal_case.applicable_accessibilities = *
+
+dotnet_naming_symbols.symbols_interfaces.applicable_kinds = interface
+dotnet_naming_symbols.symbols_interfaces.applicable_accessibilities = *
+
+dotnet_naming_symbols.symbols_type_parameters.applicable_kinds = type_parameter
+dotnet_naming_symbols.symbols_type_parameters.applicable_accessibilities = *
+
+dotnet_naming_symbols.symbols_constants.applicable_kinds = field
+dotnet_naming_symbols.symbols_constants.applicable_accessibilities = *
+dotnet_naming_symbols.symbols_constants.required_modifiers = const
+
+dotnet_naming_symbols.symbols_fields.applicable_kinds = field
+dotnet_naming_symbols.symbols_fields.applicable_accessibilities = private
+
+dotnet_naming_symbols.symbols_parameters.applicable_kinds = parameter,local,local_function
+dotnet_naming_symbols.symbols_parameters.applicable_accessibilities = *
+
+# rules
+dotnet_naming_rule.rule_for_types.symbols = symbols_allways_pascal_case
+dotnet_naming_rule.rule_for_types.style = style_pascal_case
+
+dotnet_naming_rule.rule_for_interfaces.symbols = symbols_interfaces
+dotnet_naming_rule.rule_for_interfaces.style = style_i_pascal_case
+
+dotnet_naming_rule.rule_for_type_arguments.symbols = symbols_type_parameters
+dotnet_naming_rule.rule_for_type_arguments.style = style_t_pascal_case
+
+dotnet_naming_rule.rule_for_constants.symbols = symbols_constants
+dotnet_naming_rule.rule_for_interfaces.style = style_all_caps
+
+dotnet_naming_rule.rule_for_fields.symbols = symbols_fields
+dotnet_naming_rule.rule_for_fields.style = style_underscore_camel_case
+
+dotnet_naming_rule.rule_for_fields.symbols = symbols_parameters
+dotnet_naming_rule.rule_for_fields.style = style_camel_case
+####################################################################################
+
+dotnet_diagnostic.NUnit2045.severity = none # NUnit2045: Use Assert.Multiple

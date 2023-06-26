@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <metadata>
+        <id>Seq.App.Teams.AdaptiveCard</id>
+        <title>Microsoft Teams alerting applciation for Seq with AdaptiveCard support</title>
+        <description>Seq alerting application to send notifications to Microsoft Teams channels using AdaptiveCard templates.</description>
+        <summary />
+        <tags>teams seq adaptivecard seq-app</tags>
+        <copyright>Copyright &#169; 2023</copyright>
+        <authors>MaceWindu@github.com</authors>
+        <owners>MaceWindu@github.com</owners>
+        <license type="file">LICENSE.txt</license>
+        <projectUrl>https://github.com/MaceWindu/Seq.App.Teams.AdaptiveCard</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <readme>README.md</readme>
+        <icon>icon.png</icon>
+
+        <dependencies>
+            <group targetFramework=".NETStandard2.0">
+            </group>
+        </dependencies>
+    </metadata>
+
+    <files>
+        <file src="..\LICENSE.txt" />
+        <file src="..\README.md" />
+        <file src="icon.png" />
+
+        <file src="..\src\Seq.App.Teams.AdaptiveCard\bin\Release\netstandard2.0\Seq.App.Teams.AdaptiveCard.pdb" target="lib\netstandard2.0\" />
+        <file src="..\src\Seq.App.Teams.AdaptiveCard\bin\Release\netstandard2.0\Seq.App.Teams.AdaptiveCard.xml" target="lib\netstandard2.0\" />
+        <file src="..\src\Seq.App.Teams.AdaptiveCard\bin\Release\netstandard2.0\Seq.App.Teams.AdaptiveCard.dll" target="lib\netstandard2.0\" />
+
+        <!--seq doesn't resolve nuget dependencies or do it incorreclty-->
+        <file src="..\src\Seq.App.Teams.AdaptiveCard\bin\Release\netstandard2.0\publish\AdaptiveCards.Templating.dll"                             target="lib\netstandard2.0\" />
+        <file src="..\src\Seq.App.Teams.AdaptiveCard\bin\Release\netstandard2.0\publish\AdaptiveExpressions.dll"                                  target="lib\netstandard2.0\" />
+        <file src="..\src\Seq.App.Teams.AdaptiveCard\bin\Release\netstandard2.0\publish\Antlr4.Runtime.Standard.dll"                              target="lib\netstandard2.0\" />
+        <file src="..\src\Seq.App.Teams.AdaptiveCard\bin\Release\netstandard2.0\publish\Microsoft.Recognizers.Text.DataTypes.TimexExpression.dll" target="lib\netstandard2.0\" />
+
+    </files>
+</package>

@@ -1,0 +1,39 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <Version>1.0.0</Version>
+
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <NoWarn>CS1591</NoWarn>
+    </PropertyGroup>
+
+
+    <PropertyGroup Condition="'$(Configuration)'=='Release'">
+        <DebugType>portable</DebugType>
+        <EmbedUntrackedSources>true</EmbedUntrackedSources>
+        <DebugSymbols>true</DebugSymbols>
+    </PropertyGroup>
+
+
+    <ItemGroup>
+      <None Remove="Resources\default-template.json" />
+    </ItemGroup>
+
+
+    <ItemGroup>
+      <EmbeddedResource Include="Resources\default-template.json" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Seq.Apps" />
+        <PackageReference Include="AdaptiveCards.Templating" />
+
+        <PackageReference Include="PolySharp" />
+        <PackageReference Include="Microsoft.SourceLink.GitHub">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+        </PackageReference>
+    </ItemGroup>
+
+</Project>

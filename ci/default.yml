@@ -1,0 +1,149 @@
+variables:
+  - name: solution
+    value: Seq.App.Teams.AdaptiveCard.sln
+  - name: assemblyVersion
+    value: 1.0.0
+  - name: packageVersion
+    value: 1.0.0
+  - name: nugetDevVersion
+    value: 1.0.0
+
+trigger:
+  - master
+  - release
+pr:
+  branches:
+    include:
+    - '*'
+
+stages:
+
+- stage: ''
+  displayName: ''
+  jobs:
+  - job: main_job
+    pool:
+      vmImage: 'windows-2022'
+    displayName: 'Seq.App.Teams.AdaptiveCard'
+
+    steps:
+
+#########
+# BUILD #
+#########
+    - task: NuGetToolInstaller@1
+      displayName: Install latest nuget tools
+
+    - task: PowerShell@2
+      inputs:
+        filePath: '$(Build.SourcesDirectory)/ci/SetVersion.ps1'
+        workingDirectory: '$(Build.SourcesDirectory)'
+        arguments: -path $(Build.SourcesDirectory)/src/Seq.App.Teams.AdaptiveCard/Seq.App.Teams.AdaptiveCard.csproj -version $(assemblyVersion)
+      displayName: Update assembly version
+
+    - task: MSBuild@1
+      inputs:
+        solution: '$(solution)'
+        configuration: 'Release'
+        msbuildArguments: '/t:Restore;Rebuild -m /p:ContinuousIntegrationBuild=true'
+      displayName: Build solution
+
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: 'publish'
+        projects: '$(Build.SourcesDirectory)/src/Seq.App.Teams.AdaptiveCard/Seq.App.Teams.AdaptiveCard.csproj'
+        publishWebProjects: false
+        zipAfterPublish: false
+        arguments: -f netstandard2.0 -c Release
+        nobuild: true
+      displayName: Publish project
+
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: 'publish'
+        projects: '$(Build.SourcesDirectory)/tests/Seq.App.Teams.AdaptiveCard.Tests/Seq.App.Teams.AdaptiveCard.Tests.csproj'
+        publishWebProjects: false
+        zipAfterPublish: false
+        arguments: -f net7.0 -c Release
+        nobuild: true
+      displayName: Publish test project for net7.0
+
+########
+# TEST #
+########
+    - task: UseDotNet@2
+      displayName: 'Install .net 7'
+      inputs:
+        packageType: sdk
+        version: 7.x
+
+    - script: dotnet test $(Build.SourcesDirectory)\tests\Seq.App.Teams.AdaptiveCard.Tests\bin\Release\net7.0\Seq.App.Teams.AdaptiveCard.Tests.dll /Framework:net7.0 /logger:trx
+      displayName: 'Tests: .NET 7'
+      condition: succeededOrFailed()
+
+    - task: PublishTestResults@2
+      inputs:
+        testRunner: VsTest
+        testResultsFiles: '**/*.trx'
+        testRunTitle: '.NET 7'
+      displayName: 'Publish test results'
+      condition: succeededOrFailed()
+
+    - task: DeleteFiles@1
+      inputs:
+        contents: '**/*.trx'
+      displayName: 'Cleanup'
+      condition: succeededOrFailed()
+
+##########################
+# CREATE / PUBLISH NUGET #
+##########################
+    - powershell: echo "##vso[task.setvariable variable=packageVersion]$(nugetDevVersion)-rc.$(Build.BuildId)"
+      displayName: Update nuget version
+
+    - task: PowerShell@2
+      inputs:
+        filePath: '$(Build.SourcesDirectory)/ci/BuildNuspecs.ps1'
+        workingDirectory: '$(Build.SourcesDirectory)'
+        arguments: -path $(Build.SourcesDirectory)/ci/Seq.App.Teams.AdaptiveCard.nuspec -version $(packageVersion) -branch $(Build.SourceBranchName)
+      displayName: Update nuspecs
+
+    - task: CmdLine@2
+      inputs:
+        script: nuget.exe Pack $(Build.SourcesDirectory)\ci\Seq.App.Teams.AdaptiveCard.nuspec -OutputDirectory $(Build.SourcesDirectory)\built
+        workingDirectory: $(Build.SourcesDirectory)/ci
+      displayName: Build nuget for artifacts
+      condition: and(succeeded(), ne(variables['Build.SourceBranchName'], 'release'))
+
+    - task: CmdLine@2
+      inputs:
+        script: nuget.exe Pack $(Build.SourcesDirectory)\ci\Seq.App.Teams.AdaptiveCard.nuspec -OutputDirectory $(Build.SourcesDirectory)\built -Symbols -SymbolPackageFormat snupkg
+        workingDirectory: $(Build.SourcesDirectory)/ci
+      displayName: Build nuget for nuget.org
+      condition: and(succeeded(), eq(variables['Build.SourceBranchName'], 'release'))
+
+    - task: PublishBuildArtifacts@1
+      inputs:
+        pathToPublish: '$(Build.SourcesDirectory)/built'
+        artifactName: 'nuget'
+      displayName: Publish nuget to artifacts
+
+    - task: NuGetCommand@2
+      inputs:
+        command: 'push'
+        packagesToPush: '$(Build.SourcesDirectory)/built/Seq.App.Teams.AdaptiveCard.*.nupkg'
+        nuGetFeedType: 'internal'
+        publishVstsFeed: 'projects/projects'
+      displayName: Publish to Azure Artifacts feed
+      # uncomment to publish to artifacts only from master
+      #condition: and(succeeded(), eq(variables['Build.SourceBranchName'], 'master'))
+
+    - task: NuGetCommand@2
+      inputs:
+        command: 'push'
+        packagesToPush: '$(Build.SourcesDirectory)/built/Seq.App.Teams.AdaptiveCard.*.nupkg'
+        nuGetFeedType: 'external'
+        publishFeedCredentials: 'nuget.org'
+      displayName: Publish to Nuget.org
+      condition: and(succeeded(), eq(variables['Build.SourceBranchName'], 'release'))
+
