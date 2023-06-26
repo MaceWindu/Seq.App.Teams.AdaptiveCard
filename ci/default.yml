@@ -135,8 +135,7 @@ stages:
         nuGetFeedType: 'internal'
         publishVstsFeed: 'projects/projects'
       displayName: Publish to Azure Artifacts feed
-      # uncomment to publish to artifacts only from master
-      #condition: and(succeeded(), eq(variables['Build.SourceBranchName'], 'master'))
+      condition: and(succeeded(), ne(variables['Build.SourceBranchName'], 'release'))
 
     - task: NuGetCommand@2
       inputs:
