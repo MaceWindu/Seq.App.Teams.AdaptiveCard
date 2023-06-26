@@ -2,7 +2,7 @@
 
 public sealed partial class TeamsApp
 {
-    private static void RegisterCustomfunctions()
+    public static void RegisterCustomfunctions()
     {
         // _nomd function escapes markdown control characters to disable markdown
         AdaptiveExpressions.Expression.Functions.Add("_nomd", (args) =>

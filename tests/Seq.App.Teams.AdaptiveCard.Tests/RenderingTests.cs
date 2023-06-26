@@ -9,6 +9,11 @@ namespace Seq.App.Teams.Tests;
 
 public sealed class RenderingTests
 {
+    static RenderingTests()
+    {
+        TeamsApp.RegisterCustomfunctions();
+    }
+
     private static readonly Event<LogEventData> _event = new(
         id: "event-id",
         eventType: uint.MaxValue,
@@ -78,5 +83,23 @@ data",
 
         Assert.That(errors, Is.Empty);
         Assert.That(result, Is.EqualTo(expected));
+    }
+
+    [TestCase(null, "\"${val}\"")]
+    [TestCase(123, "123")]
+    [TestCase("_italic_", "\"\\\\_italic\\\\_\"")]
+    [TestCase("**bold**", "\"\\\\*\\\\*bold\\\\*\\\\*\"")]
+    [TestCase("- list\r\n- item", "\"\\\\- list\\r\\n\\\\- item\"")]
+    [TestCase("1. list\r\n2. item", "\"1\\\\. list\\r\\n2\\\\. item\"")]
+    [TestCase("[link](http://local.host)", "\"\\\\[link](http://local\\\\.host)\"")]
+    public void TestNoMarkdown(object? value, string expected)
+    {
+        var tmpl = new AdaptiveCardTemplate($"{{\"key\":\"${{_nomd(val)}}\"}}");
+        var result = tmpl.Expand(new { val = value });
+        var errors = tmpl.GetLastTemplateExpansionWarnings();
+
+        Assert.That(errors, Is.Empty);
+
+        Assert.That(result, Is.EqualTo($"{{\"key\":{expected}}}"));
     }
 }
