@@ -30,5 +30,7 @@ public sealed partial class TeamsApp
         using var stream = GetType().Assembly.GetManifestResourceStream("Seq.App.Teams.AdaptiveCard.Resources.default-template.json");
         using var reader = new StreamReader(stream);
         _defaultTemplate = reader.ReadToEnd();
+
+        RegisterCustomfunctions();
     }
 }

@@ -30,7 +30,7 @@
             "items": [
                 {
                     "type": "TextBlock",
-                    "text": "**${Message}**",
+                    "text": "**${_nomd(Message)}**",
                     "wrap": true
                 },
                 {
@@ -38,15 +38,15 @@
                     "$data": "${indicesAndValues(Properties)}",
                     "facts": [
                         {
-                            "title": "**${index}**",
-                            "value": "${if(exists(value), value, '')} "
+                            "title": "**${_nomd(index)}**",
+                            "value": "${if(exists(value), _nomd(value), '')} "
                         }
                     ]
                 },
                 {
                     "type": "TextBlock",
                     "$when": "${exists(Exception)}",
-                    "text": "${Exception}"
+                    "text": "${_nomd(Exception)}"
                 }
             ]
         },
@@ -56,7 +56,7 @@
             "items": [
                 {
                     "type": "TextBlock",
-                    "text": "Alert condition triggered by [${Properties.NamespacedAlertTitle}](Alert.Url)",
+                    "text": "Alert condition triggered by [${_nomd(Properties.NamespacedAlertTitle)}](Alert.Url)",
                     "wrap": true
                 },
                 {
@@ -78,7 +78,7 @@
                                     "items": [
                                         {
                                             "type": "TextBlock",
-                                            "text": "**${value}**",
+                                            "text": "**${_nomd(value)}**",
                                             "wrap": true
                                         }
                                     ]
@@ -96,7 +96,7 @@
                                     "items": [
                                         {
                                             "type": "TextBlock",
-                                            "text": "${value} ",
+                                            "text": "${_nomd(value)} ",
                                             "wrap": true
                                         }
                                     ]
@@ -167,7 +167,7 @@
                                     "items": [
                                         {
                                             "type": "TextBlock",
-                                            "text": "${$data[2]} ",
+                                            "text": "${_nomd($data[2])} ",
                                             "wrap": true
                                         }
                                     ]
