@@ -1,0 +1,53 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33801.468
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Seq.App.Teams.AdaptiveCard", "src\Seq.App.Teams.AdaptiveCard\Seq.App.Teams.AdaptiveCard.csproj", "{30AEE6A3-E6FD-4229-86A1-4B3B7DB6A505}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".root", ".root", "{D2DDC05F-4EEE-4266-A828-0C0E0F5B1AF2}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		.gitattributes = .gitattributes
+		.gitignore = .gitignore
+		Directory.Build.props = Directory.Build.props
+		Directory.Packages.props = Directory.Packages.props
+		LICENSE.txt = LICENSE.txt
+		nuget.config = nuget.config
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Seq.App.Teams.AdaptiveCard.Tests", "tests\Seq.App.Teams.AdaptiveCard.Tests\Seq.App.Teams.AdaptiveCard.Tests.csproj", "{971F2FDD-EC57-4E9D-8317-C99AFE87B575}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ci", "ci", "{D0D1202E-6444-4CC2-B0F6-8FF81E977A40}"
+	ProjectSection(SolutionItems) = preProject
+		ci\BuildNuspecs.ps1 = ci\BuildNuspecs.ps1
+		ci\default.yml = ci\default.yml
+		ci\icon.png = ci\icon.png
+		ci\Seq.App.Teams.AdaptiveCard.nuspec = ci\Seq.App.Teams.AdaptiveCard.nuspec
+		ci\SetVersion.ps1 = ci\SetVersion.ps1
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{30AEE6A3-E6FD-4229-86A1-4B3B7DB6A505}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{30AEE6A3-E6FD-4229-86A1-4B3B7DB6A505}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{30AEE6A3-E6FD-4229-86A1-4B3B7DB6A505}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{30AEE6A3-E6FD-4229-86A1-4B3B7DB6A505}.Release|Any CPU.Build.0 = Release|Any CPU
+		{971F2FDD-EC57-4E9D-8317-C99AFE87B575}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{971F2FDD-EC57-4E9D-8317-C99AFE87B575}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{971F2FDD-EC57-4E9D-8317-C99AFE87B575}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{971F2FDD-EC57-4E9D-8317-C99AFE87B575}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		        SolutionGuid = {34F2739E-EFC9-4753-9EB3-CF2A94B9D9C3}
+		SolutionGuid = {45F4DD2D-CE5F-4FAA-8968-D04D1273476B}
+	EndGlobalSection
+EndGlobal

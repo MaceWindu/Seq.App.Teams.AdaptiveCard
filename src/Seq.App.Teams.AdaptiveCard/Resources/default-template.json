@@ -1,0 +1,221 @@
+{
+    "type": "AdaptiveCard",
+    "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+    "version": "1.4",
+    "body": [
+        {
+            "type": "Container",
+            "backgroundImage": {
+                "url": "${if(equals(Level,'Fatal'),'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAMSURBVBhXY1BSUgIAANAAZ+lxJ0oAAAAASUVORK5CYII=',if(equals(Level,'Error'),'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAMSURBVBhXY5gkbQMAAiwA6pD4pbEAAAAASUVORK5CYII=',if(equals(Level,'Warning'),'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAMSURBVBhXY/i/3QMABLcB/z7vHnUAAAAASUVORK5CYII=',if(equals(Level,'Information'),'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAMSURBVBhXY2DMXQkAAYoBGGHzUJ4AAAAASUVORK5CYII=','data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAMSURBVBhXYygvLwcAAs4BZpqApbgAAAAASUVORK5CYII='))))}"
+            },
+            "items": [
+                {
+                    "type": "TextBlock",
+                    "text": "**${Level}**",
+                    "wrap": true,
+                    "size": "ExtraLarge",
+                    "color": "${if(equals(Level,'Warning'), 'default', 'light')}"
+                }
+            ]
+        },
+        {
+            "type": "TextBlock",
+            "text": "{{DATE(${formatDateTime(TimeStamp,'yyyy-MM-ddTHH:mm:ssZ')},SHORT)}} {{TIME(${formatDateTime(TimeStamp,'yyyy-MM-ddTHH:mm:ssZ')})}}",
+            "wrap": true,
+            "color": "Attention"
+        },
+        {
+            "type": "Container",
+            "$when": "${not(equals(EventType,2716299265))}",
+            "items": [
+                {
+                    "type": "TextBlock",
+                    "text": "**${_nomd(Message)}**",
+                    "wrap": true
+                },
+                {
+                    "type": "FactSet",
+                    "$data": "${indicesAndValues(Properties)}",
+                    "facts": [
+                        {
+                            "title": "**${_nomd(index)}**",
+                            "value": "${jsonStringify(if(exists(value), _nomd(value), ''))}"
+                        }
+                    ]
+                },
+                {
+                    "type": "TextBlock",
+                    "$when": "${exists(Exception)}",
+                    "text": "${_nomd(Exception)}"
+                }
+            ]
+        },
+        {
+            "type": "Container",
+            "$when": "${equals(EventType,2716299265)}",
+            "items": [
+                {
+                    "type": "TextBlock",
+                    "text": "Alert condition triggered by [${_nomd(Properties.NamespacedAlertTitle)}](Alert.Url)",
+                    "wrap": true
+                },
+                {
+                    "type": "Container",
+                    "$when": "${exists(Properties.Source.Results)}",
+                    "items": [
+                        {
+                            "type": "TextBlock",
+                            "text": "**Results**",
+                            "wrap": true
+                        },
+                        {
+                            "type": "ColumnSet",
+                            "columns": [
+                                {
+                                    "type": "Column",
+                                    "$data": "${if(exists(Properties.Source.Results), indicesAndValues(Properties.Source.Results[0]), null)}",
+                                    "width": "stretch",
+                                    "items": [
+                                        {
+                                            "type": "TextBlock",
+                                            "text": "**${_nomd(value)}**",
+                                            "wrap": true
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "type": "ColumnSet",
+                            "$data": "${if(exists(Properties.Source.Results), skip(Properties.Source.Results, 1), null)}",
+                            "columns": [
+                                {
+                                    "type": "Column",
+                                    "$data": "${if(exists($data), indicesAndValues($data), null)}",
+                                    "width": "stretch",
+                                    "items": [
+                                        {
+                                            "type": "TextBlock",
+                                            "text": "${jsonStringify(_nomd(value))}",
+                                            "wrap": true
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "type": "TextBlock",
+                            "text": "[Explore detected results in Seq](${Properties.Source.ResultsUrl})",
+                            "wrap": true
+                        }
+                    ]
+                },
+                {
+                    "type": "Container",
+                    "$when": "${exists(Properties.Source.ContributingEvents)}",
+                    "items": [
+                        {
+                            "type": "TextBlock",
+                            "text": "**Contributing events**",
+                            "wrap": true
+                        },
+                        {
+                            "type": "ColumnSet",
+                            "columns": [
+                                {
+                                    "type": "Column",
+                                    "width": "stretch",
+                                    "items": [
+                                        {
+                                            "type": "TextBlock",
+                                            "text": "**Time**",
+                                            "wrap": true
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "Column",
+                                    "width": "stretch",
+                                    "items": [
+                                        {
+                                            "type": "TextBlock",
+                                            "text": "**Message**",
+                                            "wrap": true
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "type": "ColumnSet",
+                            "$data": "${if(exists(Properties.Source.ContributingEvents), skip(Properties.Source.ContributingEvents, 1), null)}",
+                            "columns": [
+                                {
+                                    "type": "Column",
+                                    "width": "stretch",
+                                    "items": [
+                                        {
+                                            "type": "TextBlock",
+                                            "text": "[${$data[1]}](${$root.BaseUri}#/events?filter=@Id%3D'${$data[0]}'&show=expanded)",
+                                            "wrap": true
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "Column",
+                                    "width": "stretch",
+                                    "items": [
+                                        {
+                                            "type": "TextBlock",
+                                            "text": "${jsonStringify(_nomd($data[2]))}",
+                                            "wrap": true
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "ColumnSet",
+            "columns": [
+                {
+                    "type": "Column",
+                    "width": "stretch",
+                    "items": [
+                        {
+                            "type": "ActionSet",
+                            "actions": [
+                                {
+                                    "type": "Action.OpenUrl",
+                                    "$when": "${not(equals(EventType,2716299265))}",
+                                    "title": "View Event in Seq",
+                                    "url": "${BaseUri}#/events?filter=@Id%3D'${Id}'&show=expanded"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "type": "Column",
+                    "width": "stretch",
+                    "items": [
+                        {
+                            "type": "ActionSet",
+                            "actions": [
+                                {
+                                    "type": "Action.OpenUrl",
+                                    "title": "Open Seq",
+                                    "url": "${BaseUri}"
+                                }
+                            ],
+                            "horizontalAlignment": "right"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
