@@ -9,6 +9,7 @@
         <PackageReference Include="NUnit3TestAdapter" />
         <PackageReference Include="NUnit" />
         <PackageReference Include="NUnit.Analyzers" />
+        <PackageReference Include="System.Text.Json" />
     </ItemGroup>
 
     <ItemGroup>

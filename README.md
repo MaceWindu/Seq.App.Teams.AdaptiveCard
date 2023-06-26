@@ -10,13 +10,7 @@ Because Teams currently doesn't support AdaptiveCard templating, it is done on a
 
 ## Context
 
-Context type has [Event](https://github.com/datalust/seq-apps-runtime/blob/dev/src/Seq.Apps/Apps/Event.cs)`<`[LogEventData](https://github.com/datalust/seq-apps-runtime/blob/dev/src/Seq.Apps/Apps/LogEvents/LogEventData.cs)`>` type and it's properties could be referenced from template using their names:
-
-```
-${Id} -> event.Id
-${Data.MessageTemplate} -> event.Data.MessageTemplate
-${Data.Properties.SomeCustomProperty} -> event.Data.Properties["SomeCustomProperty"]
-```
+Default template source: [default-template.json](https://github.com/MaceWindu/Seq.App.Teams.AdaptiveCard/blob/master/src/Seq.App.Teams.AdaptiveCard/Resources/default-template.json). Used when no template specified.
 
 ### Payload Examples
 
@@ -89,6 +83,12 @@ Those examples could be used with `AdaptiveCard` designer.
 }
 ```
 
+### Custom Functions
+
+In addition to standard AdaptiveTemplate [functions](https://learn.microsoft.com/en-us/azure/bot-service/adaptive-expressions/adaptive-expressions-prebuilt-functions?view=azure-bot-service-4.0), application implements several custom functions:
+
+- `_nomd(param)`: this function takes single parameter of any type and in case of string escapes all supported [markdown control sequences](https://learn.microsoft.com/en-us/adaptive-cards/authoring-cards/text-features). Function is useful when rendered text could contain markdown-like character sequences as AdaptiveCard doesn't provide option to disable markdown from template.
+
 ## Extra Links
 
 ### Configuration
@@ -104,5 +104,5 @@ Those examples could be used with `AdaptiveCard` designer.
 
 - [AdaptiveCard visual designer](https://adaptivecards.io/designer/)
 - [Templating language reference](https://learn.microsoft.com/en-us/adaptive-cards/templating/language)
-- [List of built-in functions](https://learn.microsoft.com/en-us/azure/bot-service/adaptive-expressions/adaptive-expressions-prebuilt-functions?view=azure-bot-service-4.0#formatEpoch)
+- [List of built-in functions](https://learn.microsoft.com/en-us/azure/bot-service/adaptive-expressions/adaptive-expressions-prebuilt-functions?view=azure-bot-service-4.0)
 - [Client-side templating](https://learn.microsoft.com/en-us/adaptive-cards/authoring-cards/text-features). Additional templating features (those are supported by Teams)

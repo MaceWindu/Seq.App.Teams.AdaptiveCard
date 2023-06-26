@@ -2,7 +2,7 @@
 
 public sealed partial class TeamsApp
 {
-    public static void RegisterCustomfunctions()
+    public static void RegisterCustomFunctions()
     {
         // _nomd function escapes markdown control characters to disable markdown
         AdaptiveExpressions.Expression.Functions.Add("_nomd", (args) =>
@@ -18,27 +18,14 @@ public sealed partial class TeamsApp
                 // character, used in markdown
                 return strValue
                     .Replace("_", "\\_")
-                    .Replace("*", "\\*")
-                    .Replace("-", "\\-")
-                    .Replace(".", "\\.")
-                    .Replace("[", "\\[")
+                    .Replace("**", "\\**")
+                    .Replace("- ", "\\- ")
+                    .Replace(". ", "\\. ")
+                    .Replace("](", "\\](")
                     ;
             }
 
             return input;
         });
-
-        // _fixstr function adds missing escaping to string, embedded in json string
-        // to workaround templating library bug
-        //AdaptiveExpressions.Expression.Functions.Add("_fixstr", (args) =>
-        //{
-        //    var input = args[0];
-
-        //    if (input is string strValue)
-        //    {
-        //    }
-
-        //    return input;
-        //});
     }
 }

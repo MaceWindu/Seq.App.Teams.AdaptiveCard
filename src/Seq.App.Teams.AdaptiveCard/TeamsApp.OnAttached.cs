@@ -31,6 +31,6 @@ public sealed partial class TeamsApp
         using var reader = new StreamReader(stream);
         _defaultTemplate = reader.ReadToEnd();
 
-        RegisterCustomfunctions();
+        RegisterCustomFunctions();
     }
 }
