@@ -106,3 +106,4 @@ In addition to standard AdaptiveTemplate [functions](https://learn.microsoft.com
 - [Templating language reference](https://learn.microsoft.com/en-us/adaptive-cards/templating/language)
 - [List of built-in functions](https://learn.microsoft.com/en-us/azure/bot-service/adaptive-expressions/adaptive-expressions-prebuilt-functions?view=azure-bot-service-4.0)
 - [Client-side templating](https://learn.microsoft.com/en-us/adaptive-cards/authoring-cards/text-features). Additional templating features (those are supported by Teams)
+- [Teams extensions](https://learn.microsoft.com/en-us/microsoftteams/platform/task-modules-and-cards/cards/cards-format?tabs=adaptive-md%2Cdesktop%2Cconnector-html). Teams-specific AdaptiveCard extensions
