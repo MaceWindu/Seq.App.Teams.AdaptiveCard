@@ -1,10 +1,15 @@
 ﻿using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 
 namespace Seq.App.Teams;
 
 public sealed partial class TeamsApp
 {
+    private static readonly Dictionary<(int, int, int), string> _colors = new();
+
     public static void RegisterCustomFunctions()
     {
         // _nomd function escapes markdown control characters to disable markdown
@@ -57,6 +62,40 @@ public sealed partial class TeamsApp
 
             sw.Flush();
             return sw.ToString();
+        });
+
+        AdaptiveExpressions.Expression.Functions.Add("_colorUri", args =>
+        {
+            if (args[0] is string colorString
+                && colorString.Length == 6
+                && int.TryParse(colorString[..2], NumberStyles.HexNumber, CultureInfo.InvariantCulture, out var red)
+                && int.TryParse(colorString[2..4], NumberStyles.HexNumber, CultureInfo.InvariantCulture, out var green)
+                && int.TryParse(colorString[4..], NumberStyles.HexNumber, CultureInfo.InvariantCulture, out var blue))
+            {
+                var key = (red, green, blue);
+
+                if (!_colors.TryGetValue(key, out var uri))
+                {
+                    var image = new byte[]
+                    {
+                        0x47, 0x49, 0x46, 0x38, 0x39, 0x61, 0x01, 0x00,
+                        0x01, 0x00, 0x80, 0x00, 0x00, (byte)red, (byte)green, (byte)blue,
+                        0x00, 0x00, 0x00, 0x21, 0xf9, 0x04, 0x00, 0x00,
+                        0x00, 0x00, 0x00, 0x2c, 0x00, 0x00, 0x00, 0x00,
+                        0x01, 0x00, 0x01, 0x00, 0x00, 0x02, 0x02, 0x44,
+                        0x01, 0x00, 0x3b
+                    };
+
+                    // supported formats by AdaptiveCard: PNG, JPEG and GIF
+                    // GIF is easiest to generate and smallest one
+                    uri = $"data:image/gif;base64,{Convert.ToBase64String(image)}";
+                    _colors[key] = uri;
+                }
+
+                return uri;
+            }
+
+            return string.Empty;
         });
     }
 }

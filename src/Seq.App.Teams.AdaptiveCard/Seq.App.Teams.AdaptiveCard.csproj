@@ -15,12 +15,6 @@
         <DebugSymbols>true</DebugSymbols>
     </PropertyGroup>
 
-
-    <ItemGroup>
-      <None Remove="Resources\default-template.json" />
-    </ItemGroup>
-
-
     <ItemGroup>
       <EmbeddedResource Include="Resources\default-template.json" />
     </ItemGroup>
