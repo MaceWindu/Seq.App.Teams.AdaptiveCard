@@ -42,7 +42,7 @@
                     "facts": [
                         {
                             "title": "**${_nomd(index)}**",
-                            "value": "${jsonStringify(if(exists(value), _nomd(value), ''))}"
+                            "value": "${_jsonPrettify(if(exists(value), _nomd(value), ''))}"
                         }
                     ]
                 },
@@ -99,7 +99,7 @@
                                     "items": [
                                         {
                                             "type": "TextBlock",
-                                            "text": "${jsonStringify(_nomd(value))}",
+                                            "text": "${_jsonPrettify(_nomd(value))}",
                                             "wrap": true
                                         }
                                     ]
@@ -170,7 +170,7 @@
                                     "items": [
                                         {
                                             "type": "TextBlock",
-                                            "text": "${jsonStringify(_nomd($data[2]))}",
+                                            "text": "${_jsonPrettify(_nomd($data[2]))}",
                                             "wrap": true
                                         }
                                     ]

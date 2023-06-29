@@ -125,4 +125,16 @@ data",
         Assert.That(result, Is.EqualTo(/*lang=json,strict*/ "{\"key\":\"[1,\\\"two\\\",null]\"}"));
         Assert.DoesNotThrow(() => JsonDocument.Parse(result));
     }
+
+    [Test]
+    public void TestObjectFormatting()
+    {
+        var tmpl = new AdaptiveCardTemplate($"{{\"key\":\"${{_jsonPrettify(val)}}\"}}");
+        var result = tmpl.Expand(new { val = new { one = 1, two = "two", three = (string?)null } });
+        var errors = tmpl.GetLastTemplateExpansionWarnings();
+
+        Assert.That(errors, Is.Empty);
+        Assert.That(result, Is.EqualTo(/*lang=json,strict*/ "{\"key\":\"{\\n\\n⠀⠀\\\"one\\\": 1,\\n\\n⠀⠀\\\"two\\\": \\\"two\\\",\\n\\n⠀⠀\\\"three\\\": null\\n\\n}\"}"));
+        Assert.DoesNotThrow(() => JsonDocument.Parse(result));
+    }
 }
