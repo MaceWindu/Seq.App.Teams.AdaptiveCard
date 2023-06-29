@@ -4,7 +4,7 @@ namespace Seq.App.Teams;
 
 public sealed partial class TeamsApp
 {
-    private static readonly JsonSerializerSettings _prettyPrint = new ()
+    private static readonly JsonSerializerSettings _prettyPrint = new()
     {
         Formatting = Formatting.Indented,
         MaxDepth = null,

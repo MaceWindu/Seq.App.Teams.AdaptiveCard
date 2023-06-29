@@ -213,23 +213,4 @@ data",
         Assert.That(result.Count(c => c == '$'), Is.EqualTo(1));
         Assert.DoesNotThrow(() => JsonDocument.Parse(result));
     }
-
-    [Test, Explicit]
-    public void Debug()
-    {
-        //var data = @"TODO";
-        var data = @"TODO";
-
-        using var stream = typeof(TeamsApp).Assembly.GetManifestResourceStream("Seq.App.Teams.AdaptiveCard.Resources.default-template.json")!;
-        using var reader = new StreamReader(stream);
-        var template = reader.ReadToEnd();
-
-        var tmpl = new AdaptiveCardTemplate(template);
-        var result = tmpl.Expand(data);
-        var errors = tmpl.GetLastTemplateExpansionWarnings();
-
-        Assert.That(errors, Is.Empty);
-        Assert.That(result.Count(c => c == '$'), Is.EqualTo(1));
-        Assert.DoesNotThrow(() => JsonDocument.Parse(result));
-    }
 }
