@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Globalization;
 using System.IO;
 
@@ -77,14 +76,19 @@ public sealed partial class TeamsApp
 
                 if (!_colors.TryGetValue(key, out var uri))
                 {
-                    using var bmp = new Bitmap(1, 1);
-                    bmp.SetPixel(0, 0, Color.FromArgb(red, green, blue));
+                    var image = new byte[]
+                    {
+                        0x42, 0x4d, 0x3a, 0x00, 0x00, 0x00, 0x00, 0x00,
+                        0x00, 0x00, 0x36, 0x00, 0x00, 0x00, 0x28, 0x00,
+                        0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x00,
+                        0x00, 0x00, 0x01, 0x00, 0x18, 0x00, 0x00, 0x00,
+                        0x00, 0x00, 0x04, 0x00, 0x00, 0x00, 0xc3, 0x0e,
+                        0x00, 0x00, 0xc3, 0x0e, 0x00, 0x00, 0x00, 0x00,
+                        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, (byte)blue, (byte)green,
+                        (byte)red, 0x00
+                    };
 
-                    using var stream = new MemoryStream();
-                    bmp.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
-                    var data = stream.ToArray();
-
-                    uri = $"data:image/png;base64,{Convert.ToBase64String(data)}";
+                    uri = $"data:image/bmp;base64,{Convert.ToBase64String(image)}";
                     _colors[key] = uri;
                 }
 
