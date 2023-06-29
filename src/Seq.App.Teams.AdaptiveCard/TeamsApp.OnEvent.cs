@@ -3,6 +3,8 @@ using Newtonsoft.Json;
 using Seq.Apps;
 using Seq.Apps.LogEvents;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -28,20 +30,55 @@ public sealed partial class TeamsApp
 
     private HttpClientHandler _httpClientHandler = default!;
 
-    private Payload BuildPayload(Event<LogEventData> evt)
+    private Dictionary<string, object?> BuildPayload(Event<LogEventData> evt)
     {
-        var data = new Payload(
-            evt.Id,
-            evt.TimestampUtc.ToString("O"),
-            evt.Data.Level.ToString(),
-            evt.Data.MessageTemplate,
-            evt.Data.RenderedMessage,
-            evt.Data.Exception,
-            evt.Data.Properties,
-            evt.EventType,
-            App.Title,
-            Host.InstanceName,
-            Host.BaseUri);
+        var data = new Dictionary<string, object?>()
+        {
+            { "Id", evt.Id },
+            { "TimeStamp", evt.TimestampUtc.ToString("O") },
+            { "Level", evt.Data.Level.ToString() },
+            { "MessageTemplate", evt.Data.MessageTemplate },
+            { "Message", evt.Data.RenderedMessage },
+            { "Exception", evt.Data.Exception },
+            { "Properties", evt.Data.Properties },
+            { "EventType", evt.EventType },
+            { "AppTitle", App.Title },
+            { "InstanceName", Host.InstanceName },
+            { "BaseUri", Host.BaseUri },
+        };
+
+        foreach (var propPath in ExcludedProperties)
+        {
+            var abort = false;
+            var currentData = data;
+            for (var i = 0; i < propPath.Count && !abort; i++)
+            {
+                var name = propPath[i];
+                if (i == propPath.Count - 1)
+                {
+                    _ = currentData.Remove(name);
+                }
+                else if (currentData.TryGetValue(name, out var value))
+                {
+                    if (value is Dictionary<string, object?> dict)
+                    {
+                        currentData = dict;
+                    }
+                    else if (value is IReadOnlyDictionary<string, object?> roDict)
+                    {
+                        currentData[name] = currentData = roDict.ToDictionary(_ => _.Key, _ => _.Value);
+                    }
+                    else
+                    {
+                        abort = true;
+                    }
+                }
+                else
+                {
+                    abort = true;
+                }
+            }
+        }
 
         if (TraceEnabled)
         {

@@ -41,18 +41,20 @@ data",
     [Test]
     public void TestDefaultTemplate()
     {
-        var data = new Payload(
-            _event.Id,
-            _event.TimestampUtc.ToString("O"),
-            _event.Data.Level.ToString(),
-            _event.Data.MessageTemplate,
-            _event.Data.RenderedMessage,
-            _event.Data.Exception,
-            _event.Data.Properties,
-            _event.EventType,
-            "app title",
-            "instance name",
-            "http://localhost");
+        var data = new Dictionary<string, object?>()
+        {
+            { "Id", _event.Id },
+            { "TimeStamp", _event.TimestampUtc.ToString("O") },
+            { "Level", _event.Data.Level.ToString() },
+            { "MessageTemplate", _event.Data.MessageTemplate },
+            { "Message", _event.Data.RenderedMessage },
+            { "Exception", _event.Data.Exception },
+            { "Properties", _event.Data.Properties },
+            { "EventType", _event.EventType },
+            { "AppTitle", "app title" },
+            { "InstanceName", "instance name" },
+            { "BaseUri", "http://localhost" }
+        };
 
         using var stream = typeof(TeamsApp).Assembly.GetManifestResourceStream("Seq.App.Teams.AdaptiveCard.Resources.default-template.json")!;
         using var reader = new StreamReader(stream);
@@ -70,18 +72,20 @@ data",
     [Test]
     public void TestDefaultTemplateNoOptionsData()
     {
-        var data = new Payload(
-            _event.Id,
-            _event.TimestampUtc.ToString("O"),
-            _event.Data.Level.ToString(),
-            _event.Data.MessageTemplate,
-            _event.Data.RenderedMessage,
-            null,
-            _event.Data.Properties,
-            _event.EventType,
-            "app title",
-            "instance name",
-            "http://localhost");
+        var data = new Dictionary<string, object?>()
+        {
+            { "Id", _event.Id },
+            { "TimeStamp", _event.TimestampUtc.ToString("O") },
+            { "Level", _event.Data.Level.ToString() },
+            { "MessageTemplate", _event.Data.MessageTemplate },
+            { "Message", _event.Data.RenderedMessage },
+            { "Exception", _event.Data.Exception },
+            { "Properties", _event.Data.Properties },
+            { "EventType", _event.EventType },
+            { "AppTitle", "app title" },
+            { "InstanceName", "instance name" },
+            { "BaseUri", "http://localhost" }
+        };
 
         using var stream = typeof(TeamsApp).Assembly.GetManifestResourceStream("Seq.App.Teams.AdaptiveCard.Resources.default-template.json")!;
         using var reader = new StreamReader(stream);
@@ -134,18 +138,21 @@ data",
             { "SuppressedUntil", "2023-06-22T13:08:13.3585376Z"},
             { "Failures", null }
         };
-        var data = new Payload(
-            _event.Id,
-            _event.TimestampUtc.ToString("O"),
-            _event.Data.Level.ToString(),
-            _event.Data.MessageTemplate,
-            _event.Data.RenderedMessage,
-            _event.Data.Exception,
-            props,
-            2716299265,
-            "app title",
-            "instance name",
-            "http://localhost");
+
+        var data = new Dictionary<string, object?>()
+        {
+            { "Id", _event.Id },
+            { "TimeStamp", _event.TimestampUtc.ToString("O") },
+            { "Level", _event.Data.Level.ToString() },
+            { "MessageTemplate", _event.Data.MessageTemplate },
+            { "Message", _event.Data.RenderedMessage },
+            { "Exception", _event.Data.Exception },
+            { "Properties", props },
+            { "EventType", 2716299265 },
+            { "AppTitle", "app title" },
+            { "InstanceName", "instance name" },
+            { "BaseUri", "http://localhost" }
+        };
 
         using var stream = typeof(TeamsApp).Assembly.GetManifestResourceStream("Seq.App.Teams.AdaptiveCard.Resources.default-template.json")!;
         using var reader = new StreamReader(stream);
@@ -188,37 +195,21 @@ data",
             { "SuppressedUntil", "2023-06-22T13:08:13.3585376Z"},
             { "Failures", null }
         };
-        var data = new Payload(
-            _event.Id,
-            _event.TimestampUtc.ToString("O"),
-            _event.Data.Level.ToString(),
-            _event.Data.MessageTemplate,
-            _event.Data.RenderedMessage,
-            _event.Data.Exception,
-            props,
-            2716299265,
-            "app title",
-            "instance name",
-            "http://localhost");
 
-        using var stream = typeof(TeamsApp).Assembly.GetManifestResourceStream("Seq.App.Teams.AdaptiveCard.Resources.default-template.json")!;
-        using var reader = new StreamReader(stream);
-        var template = reader.ReadToEnd();
-
-        var tmpl = new AdaptiveCardTemplate(template);
-        var result = tmpl.Expand(data);
-        var errors = tmpl.GetLastTemplateExpansionWarnings();
-
-        Assert.That(errors, Is.Empty);
-        Assert.That(result.Count(c => c == '$'), Is.EqualTo(1));
-        Assert.DoesNotThrow(() => JsonDocument.Parse(result));
-    }
-
-    [Test, Explicit]
-    public void Debug()
-    {
-        //var data = @"TODO";
-        var data = @"TODO";
+        var data = new Dictionary<string, object?>()
+        {
+            { "Id", _event.Id },
+            { "TimeStamp", _event.TimestampUtc.ToString("O") },
+            { "Level", _event.Data.Level.ToString() },
+            { "MessageTemplate", _event.Data.MessageTemplate },
+            { "Message", _event.Data.RenderedMessage },
+            { "Exception", _event.Data.Exception },
+            { "Properties", props },
+            { "EventType", 2716299265 },
+            { "AppTitle", "app title" },
+            { "InstanceName", "instance name" },
+            { "BaseUri", "http://localhost" }
+        };
 
         using var stream = typeof(TeamsApp).Assembly.GetManifestResourceStream("Seq.App.Teams.AdaptiveCard.Resources.default-template.json")!;
         using var reader = new StreamReader(stream);

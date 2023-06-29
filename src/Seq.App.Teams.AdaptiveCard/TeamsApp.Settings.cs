@@ -40,11 +40,17 @@ public sealed partial class TeamsApp
         HelpText = "When set, only events with specified levels are sent to Teams. Valid Values: Verbose,Debug,Information,Warning,Error,Fatal (comma-separated)")]
     public string? LogEventLevels { get; set; }
 
+    [SeqAppSetting(
+        DisplayName = "AdaptiveCard template",
+        HelpText = "You can use AdaptiveCard designer at https://adaptivecards.io/designer/ to design your card",
+        InputType = SettingInputType.LongText,
+        IsOptional = true)]
+    public string? CardTemplate { get; set; }
 
     [SeqAppSetting(
-    DisplayName = "AdaptiveCard template",
-    HelpText = "You can use AdaptiveCard designer at https://adaptivecards.io/designer/ to design your card",
-    InputType = SettingInputType.LongText,
-    IsOptional = true)]
-    public string? CardTemplate { get; set; }
+        DisplayName = "Excluded Properties",
+        HelpText = "Specify properties to exclude from template model. Each property should be specified on separate line. Format: [property-name]+. `\\`, `]`, `\\r` and `\\n` symbols in property name should be escaped with \\: `\\\\`, `\\]`, `\\r`, `\\n`",
+        InputType = SettingInputType.LongText,
+        IsOptional = true)]
+    public string? PropertiesToExclude { get; set; }
 }

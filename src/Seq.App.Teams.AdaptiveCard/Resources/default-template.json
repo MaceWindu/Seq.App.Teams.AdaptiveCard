@@ -9,7 +9,7 @@
         {
             "type": "Container",
             "backgroundImage": {
-                "url": "${if(equals(Level,'Fatal'),'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAMSURBVBhXY1BSUgIAANAAZ+lxJ0oAAAAASUVORK5CYII=',if(equals(Level,'Error'),'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAMSURBVBhXY5gkbQMAAiwA6pD4pbEAAAAASUVORK5CYII=',if(equals(Level,'Warning'),'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAMSURBVBhXY/i/3QMABLcB/z7vHnUAAAAASUVORK5CYII=',if(equals(Level,'Information'),'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAMSURBVBhXY2DMXQkAAYoBGGHzUJ4AAAAASUVORK5CYII=','data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAMSURBVBhXYygvLwcAAs4BZpqApbgAAAAASUVORK5CYII='))))}"
+                "url": "${_colorUri(if(equals(Level,'Fatal'),'222222',if(equals(Level,'Error'),'921b3c',if(equals(Level,'Warning'),'ffb748',if(equals(Level,'Information'),'016DA9','777777')))))}"
             },
             "items": [
                 {
@@ -42,7 +42,7 @@
                     "facts": [
                         {
                             "title": "**${_nomd(index)}**",
-                            "value": "${jsonStringify(if(exists(value), _nomd(value), ''))}"
+                            "value": "${_jsonPrettify(if(exists(value), _nomd(value), ''))}"
                         }
                     ]
                 },
@@ -99,7 +99,7 @@
                                     "items": [
                                         {
                                             "type": "TextBlock",
-                                            "text": "${jsonStringify(_nomd(value))}",
+                                            "text": "${_jsonPrettify(_nomd(value))}",
                                             "wrap": true
                                         }
                                     ]
@@ -170,7 +170,7 @@
                                     "items": [
                                         {
                                             "type": "TextBlock",
-                                            "text": "${jsonStringify(_nomd($data[2]))}",
+                                            "text": "${_jsonPrettify(_nomd($data[2]))}",
                                             "wrap": true
                                         }
                                     ]

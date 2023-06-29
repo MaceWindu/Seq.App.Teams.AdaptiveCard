@@ -2,11 +2,11 @@ variables:
   - name: solution
     value: Seq.App.Teams.AdaptiveCard.sln
   - name: assemblyVersion
-    value: 1.0.1
+    value: 1.1.0
   - name: packageVersion
-    value: 1.0.1
+    value: 1.1.0
   - name: nugetDevVersion
-    value: 1.0.1
+    value: 1.1.0
 
 trigger:
   - master

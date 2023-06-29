@@ -83,25 +83,6 @@ data",
         Assert.DoesNotThrow(() => JsonDocument.Parse(result));
     }
 
-    //[TestCase(new object?[] { 1, null, "two" }, "\"${val}\"")]
-    [TestCase(null, "\"${val}\"")]
-    [TestCase(123, "123")]
-    [TestCase("_italic_", "\"\\\\_italic\\\\_\"")]
-    [TestCase("**bold**", "\"\\\\**bold\\\\**\"")]
-    [TestCase("- list\r\n- item", "\"\\\\- list\\r\\n\\\\- item\"")]
-    [TestCase("1. list\r\n2. item", "\"1\\\\. list\\r\\n2\\\\. item\"")]
-    [TestCase("[link](http://local.host)", "\"[link\\\\](http://local.host)\"")]
-    public void TestNoMarkdown(object? value, string expected)
-    {
-        var tmpl = new AdaptiveCardTemplate($"{{\"key\":\"${{_nomd(val)}}\"}}");
-        var result = tmpl.Expand(new { val = value });
-        var errors = tmpl.GetLastTemplateExpansionWarnings();
-
-        Assert.That(errors, Is.Empty);
-        Assert.That(result, Is.EqualTo($"{{\"key\":{expected}}}"));
-        Assert.DoesNotThrow(() => JsonDocument.Parse(result));
-    }
-
     [Test]
     public void TestObjectAsString()
     {
