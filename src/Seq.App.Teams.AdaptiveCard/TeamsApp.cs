@@ -3,6 +3,7 @@ using Seq.Apps.LogEvents;
 using Serilog;
 using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace Seq.App.Teams;
 
@@ -14,7 +15,7 @@ public sealed partial class TeamsApp : SeqApp, ISubscribeToAsync<LogEventData>
     private ILogger _log = default!;
     private string _defaultTemplate = default!;
     private HashSet<LogEventLevel>? _loggedLevels;
-
+    private IReadOnlyList<IReadOnlyList<string>>? _excludedProperties;
 
     private HashSet<LogEventLevel> LogEventLevelList
     {
@@ -25,7 +26,6 @@ public sealed partial class TeamsApp : SeqApp, ISubscribeToAsync<LogEventData>
                 var result = new HashSet<LogEventLevel>();
                 if (!string.IsNullOrEmpty(LogEventLevels))
                 {
-
                     var strValues = LogEventLevels!.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
                     if (strValues?.Length > 0)
                     {
@@ -44,5 +44,122 @@ public sealed partial class TeamsApp : SeqApp, ISubscribeToAsync<LogEventData>
 
             return _loggedLevels;
         }
+    }
+
+    private IReadOnlyList<IReadOnlyList<string>> ExcludedProperties
+    {
+        get
+        {
+            if (_excludedProperties == null)
+            {
+                var result = new List<IReadOnlyList<string>>();
+                if (!string.IsNullOrWhiteSpace(PropertiesToExclude))
+                {
+
+                    var lines = PropertiesToExclude!.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+
+                    foreach (var line in lines)
+                    {
+                        var propertyPath = ParsePropertyPath(line.Trim());
+                        if (propertyPath != null)
+                        {
+                            result.Add(propertyPath);
+                        }
+                    }
+                }
+
+                _excludedProperties = result;
+            }
+
+            return _excludedProperties;
+        }
+    }
+
+    public static List<string>? ParsePropertyPath(string path)
+    {
+        path = path.Trim();
+
+        if (string.IsNullOrWhiteSpace(path) || path.Length < 2 || path[0] != '[' || path[^1] != ']')
+        {
+            return null;
+        }
+
+        List<string>? properties = null;
+
+        var isInName = true;
+        var valid = true;
+        var sb = new StringBuilder();
+        for (var i = 1; i < path.Length && valid; i++)
+        {
+            switch (path[i])
+            {
+                case ']':
+                    if (isInName)
+                    {
+                        (properties ??= new()).Add(sb.ToString());
+                        sb.Length = 0;
+                        isInName = false;
+                    }
+                    else
+                    {
+                        valid = false;
+                    }
+                    break;
+                case '[':
+                    if (isInName)
+                    {
+                        _ = sb.Append('[');
+                    }
+                    else
+                    {
+                        isInName = true;
+                    }
+                    break;
+                case '\\':
+                    if (path.Length < i + 2)
+                    {
+                        valid = false;
+                    }
+                    else
+                    {
+                        switch (path[i + 1])
+                        {
+                            case 'r':
+                                _ = sb.Append('\r');
+                                i++;
+                                break;
+                            case 'n':
+                                _ = sb.Append('\n');
+                                i++;
+                                break;
+                            case ']':
+                            case '\\':
+                                _ = sb.Append(path[i + 1]);
+                                i++;
+                                break;
+                            default:
+                                valid = false;
+                                break;
+                        }
+                    }
+                    break;
+                case '\r':
+                case '\n':
+                    valid = false;
+                    break;
+                default:
+                    if (isInName)
+                    {
+                        _ = sb.Append(path[i]);
+                    }
+                    else
+                    {
+                        valid = false;
+                    }
+                    break;
+            }
+        }
+
+        return valid ? properties : null;
     }
 }
