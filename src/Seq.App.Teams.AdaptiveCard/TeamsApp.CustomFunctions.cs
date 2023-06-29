@@ -1,10 +1,16 @@
 ﻿using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Globalization;
 using System.IO;
 
 namespace Seq.App.Teams;
 
 public sealed partial class TeamsApp
 {
+    private static readonly Dictionary<(int, int, int), string> _colors = new();
+
     public static void RegisterCustomFunctions()
     {
         // _nomd function escapes markdown control characters to disable markdown
@@ -57,6 +63,35 @@ public sealed partial class TeamsApp
 
             sw.Flush();
             return sw.ToString();
+        });
+
+        AdaptiveExpressions.Expression.Functions.Add("_colorUri", args =>
+        {
+            if (args[0] is string colorString
+                && colorString.Length == 6
+                && int.TryParse(colorString[..2], NumberStyles.HexNumber, CultureInfo.InvariantCulture, out var red)
+                && int.TryParse(colorString[2..4], NumberStyles.HexNumber, CultureInfo.InvariantCulture, out var green)
+                && int.TryParse(colorString[4..], NumberStyles.HexNumber, CultureInfo.InvariantCulture, out var blue))
+            {
+                var key = (red, green, blue);
+
+                if (!_colors.TryGetValue(key, out var uri))
+                {
+                    using var bmp = new Bitmap(1, 1);
+                    bmp.SetPixel(0, 0, Color.FromArgb(red, green, blue));
+
+                    using var stream = new MemoryStream();
+                    bmp.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
+                    var data = stream.ToArray();
+
+                    uri = $"data:image/png;base64,{Convert.ToBase64String(data)}";
+                    _colors[key] = uri;
+                }
+
+                return uri;
+            }
+
+            return string.Empty;
         });
     }
 }
