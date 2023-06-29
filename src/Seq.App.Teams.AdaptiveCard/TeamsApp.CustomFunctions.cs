@@ -1,11 +1,20 @@
-﻿namespace Seq.App.Teams;
+﻿using Newtonsoft.Json;
+
+namespace Seq.App.Teams;
 
 public sealed partial class TeamsApp
 {
+    private static readonly JsonSerializerSettings _prettyPrint = new ()
+    {
+        Formatting = Formatting.Indented,
+        MaxDepth = null,
+        NullValueHandling = NullValueHandling.Ignore
+    };
+
     public static void RegisterCustomFunctions()
     {
         // _nomd function escapes markdown control characters to disable markdown
-        AdaptiveExpressions.Expression.Functions.Add("_nomd", (args) =>
+        AdaptiveExpressions.Expression.Functions.Add("_nomd", args =>
         {
             var input = args[0];
 
@@ -26,6 +35,11 @@ public sealed partial class TeamsApp
             }
 
             return input;
+        });
+
+        AdaptiveExpressions.Expression.Functions.Add("_jsonPrettify", args =>
+        {
+            return JsonConvert.SerializeObject(args[0], _prettyPrint);
         });
     }
 }
