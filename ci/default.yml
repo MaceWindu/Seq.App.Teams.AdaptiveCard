@@ -93,9 +93,6 @@ stages:
         arguments: -path $(Build.SourcesDirectory)/ci/Seq.App.Teams.AdaptiveCard.nuspec -version $(packageVersion) -branch $(Build.SourceBranchName)
       displayName: Update nuspecs
 
-    - task: NuGetToolInstaller@1
-      displayName: Install latest nuget tools
-
     - task: CmdLine@2
       inputs:
         script: nuget pack $(Build.SourcesDirectory)/ci/Seq.App.Teams.AdaptiveCard.nuspec -OutputDirectory $(Build.SourcesDirectory)/built
