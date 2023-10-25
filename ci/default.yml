@@ -1,6 +1,8 @@
 variables:
   - name: solution
     value: Seq.App.Teams.AdaptiveCard.sln
+  - name: build_configuration
+    value: Release
   - name: assemblyVersion
     value: 1.2.0
   - name: packageVersion
@@ -48,7 +50,7 @@ stages:
       inputs:
         command: 'build'
         projects: '$(solution)'
-        arguments: '-property:ContinuousIntegrationBuild=true --configuration Release'
+        arguments: '-property:ContinuousIntegrationBuild=true --configuration $(build_configuration)'
       displayName: Build Solution
 
     - task: DotNetCoreCLI@2
