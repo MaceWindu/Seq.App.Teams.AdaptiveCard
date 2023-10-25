@@ -98,7 +98,7 @@ stages:
 
     - task: CmdLine@2
       inputs:
-        script: mkdir $(Build.SourcesDirectory)/built && nuget.exe Pack $(Build.SourcesDirectory)/ci/Seq.App.Teams.AdaptiveCard.nuspec -OutputDirectory $(Build.SourcesDirectory)/built
+        script: chmod a+x $(which nuget.exe) && nuget.exe Pack $(Build.SourcesDirectory)/ci/Seq.App.Teams.AdaptiveCard.nuspec -OutputDirectory $(Build.SourcesDirectory)/built
         workingDirectory: $(Build.SourcesDirectory)/ci
       displayName: Build nuget for artifacts
       condition: and(succeeded(), ne(variables['Build.SourceBranchName'], 'release'))
