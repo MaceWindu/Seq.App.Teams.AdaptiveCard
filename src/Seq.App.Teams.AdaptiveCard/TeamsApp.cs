@@ -12,6 +12,9 @@ namespace Seq.App.Teams;
 public sealed partial class TeamsApp : SeqApp, ISubscribeToAsync<LogEventData>
 #pragma warning restore CA1001 // Types that own disposable fields should be disposable
 {
+    private static readonly char[] _logLevelsSeparator = [','];
+    private static readonly char[] _propertiesSeparators = ['\r', '\n'];
+
     private ILogger _log = default!;
     private string _defaultTemplate = default!;
     private HashSet<LogEventLevel>? _loggedLevels;
@@ -26,7 +29,7 @@ public sealed partial class TeamsApp : SeqApp, ISubscribeToAsync<LogEventData>
                 var result = new HashSet<LogEventLevel>();
                 if (!string.IsNullOrEmpty(LogEventLevels))
                 {
-                    var strValues = LogEventLevels!.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                    var strValues = LogEventLevels!.Split(_logLevelsSeparator, StringSplitOptions.RemoveEmptyEntries);
                     if (strValues?.Length > 0)
                     {
                         foreach (var strValue in strValues)
@@ -56,7 +59,7 @@ public sealed partial class TeamsApp : SeqApp, ISubscribeToAsync<LogEventData>
                 if (!string.IsNullOrWhiteSpace(PropertiesToExclude))
                 {
 
-                    var lines = PropertiesToExclude!.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+                    var lines = PropertiesToExclude!.Split(_propertiesSeparators, StringSplitOptions.RemoveEmptyEntries);
 
                     foreach (var line in lines)
                     {
@@ -96,7 +99,7 @@ public sealed partial class TeamsApp : SeqApp, ISubscribeToAsync<LogEventData>
                 case ']':
                     if (isInName)
                     {
-                        (properties ??= new()).Add(sb.ToString());
+                        (properties ??= []).Add(sb.ToString());
                         sb.Length = 0;
                         isInName = false;
                     }

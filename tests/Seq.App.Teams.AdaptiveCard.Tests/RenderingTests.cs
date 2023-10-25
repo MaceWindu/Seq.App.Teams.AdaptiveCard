@@ -13,7 +13,7 @@ public sealed class RenderingTests
     private static readonly Event<LogEventData> _event = new(
         id: "event-id",
         eventType: uint.MaxValue,
-        timestampUtc: new DateTime(2020, 1, 22, 18, 19, 59, 123, DateTimeKind.Utc).AddTicks(4567),
+        timestamp: new DateTime(2020, 1, 22, 18, 19, 59, 123, DateTimeKind.Utc).AddTicks(4567),
         new LogEventData()
         {
             Id = "some-other-id",
@@ -34,7 +34,6 @@ data",
                 { "#FieldObjectArray", new object[] { new { one = 1, two = 2 }, new { one = -1, two = -2 }}},
             }
         });
-
 
     [TestCase(/*lang=json,strict*/ "{ \"key\": \"${unknown_field}\"}", /*lang=json,strict*/ "{\"key\":\"${unknown_field}\"}")]
     [TestCase(/*lang=json,strict*/ "{ \"key\": \"${null_field}\"}", /*lang=json,strict*/ "{\"key\":\"${null_field}\"}")]
@@ -59,9 +58,9 @@ data",
     [TestCase(/*lang=json,strict*/ "[{ \"$data\": \"${Data.Properties.#FieldObjectArray}\", \"value\": \"${one}=>${two}\" }]", /*lang=json,strict*/ "[{\"value\":\"1=>2\"},{\"value\":\"-1=>-2\"}]")]
     public void TestRendering(string template, string expected)
     {
-        var tmpl = new AdaptiveCardTemplate(template);
-        var result = tmpl.Expand(_event);
-        var errors = tmpl.GetLastTemplateExpansionWarnings();
+        var cardTemplate = new AdaptiveCardTemplate(template);
+        var result = cardTemplate.Expand(_event);
+        var errors = cardTemplate.GetLastTemplateExpansionWarnings();
 
         Assert.That(errors, Is.Empty);
         Assert.That(result, Is.EqualTo(expected));
@@ -74,9 +73,9 @@ data",
     [TestCase("string", /*lang=json,strict*/ "{\"key\":\"string\"}")]
     public void TestRenderingUnknown(object? substitution, string expected)
     {
-        var tmpl = new AdaptiveCardTemplate(/*lang=json,strict*/ "{\"key\":\"${smth}\"}");
-        var result = tmpl.Expand(_event, _ => substitution);
-        var errors = tmpl.GetLastTemplateExpansionWarnings();
+        var cardTemplate = new AdaptiveCardTemplate(/*lang=json,strict*/ "{\"key\":\"${value}\"}");
+        var result = cardTemplate.Expand(_event, _ => substitution);
+        var errors = cardTemplate.GetLastTemplateExpansionWarnings();
 
         Assert.That(errors, Is.Empty);
         Assert.That(result, Is.EqualTo(expected));
@@ -86,9 +85,9 @@ data",
     [Test]
     public void TestObjectAsString()
     {
-        var tmpl = new AdaptiveCardTemplate($"{{\"key\":\"${{jsonStringify(_nomd(val))}}\"}}");
-        var result = tmpl.Expand(new { val = new { one = 1, two = "two", three = (string?)null } });
-        var errors = tmpl.GetLastTemplateExpansionWarnings();
+        var cardTemplate = new AdaptiveCardTemplate($"{{\"key\":\"${{jsonStringify(_nomd(val))}}\"}}");
+        var result = cardTemplate.Expand(new { val = new { one = 1, two = "two", three = (string?)null } });
+        var errors = cardTemplate.GetLastTemplateExpansionWarnings();
 
         Assert.That(errors, Is.Empty);
         Assert.That(result, Is.EqualTo(/*lang=json,strict*/ "{\"key\":\"{\\\"one\\\":1,\\\"two\\\":\\\"two\\\",\\\"three\\\":null}\"}"));
@@ -98,9 +97,9 @@ data",
     [Test]
     public void TestArrayAsString()
     {
-        var tmpl = new AdaptiveCardTemplate($"{{\"key\":\"${{jsonStringify(_nomd(val))}}\"}}");
-        var result = tmpl.Expand(new { val = new object?[] { 1, "two", null } });
-        var errors = tmpl.GetLastTemplateExpansionWarnings();
+        var cardTemplate = new AdaptiveCardTemplate($"{{\"key\":\"${{jsonStringify(_nomd(val))}}\"}}");
+        var result = cardTemplate.Expand(new { val = new object?[] { 1, "two", null } });
+        var errors = cardTemplate.GetLastTemplateExpansionWarnings();
 
         Assert.That(errors, Is.Empty);
         Assert.That(result, Is.EqualTo(/*lang=json,strict*/ "{\"key\":\"[1,\\\"two\\\",null]\"}"));

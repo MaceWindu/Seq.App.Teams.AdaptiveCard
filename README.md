@@ -88,7 +88,7 @@ Those examples could be used with `AdaptiveCard` designer.
 In addition to standard AdaptiveTemplate [functions](https://learn.microsoft.com/en-us/azure/bot-service/adaptive-expressions/adaptive-expressions-prebuilt-functions?view=azure-bot-service-4.0), application implements several custom functions:
 
 - `_nomd(param)`: this function takes single parameter of any type and in case of string escapes all supported [markdown control sequences](https://learn.microsoft.com/en-us/adaptive-cards/authoring-cards/text-features). Function is useful when rendered text could contain markdown-like character sequences as AdaptiveCard doesn't provide option to disable markdown from template.
-- `_jsonPrettify(param)`: same as built-in jsonStringify(), but `JSON` rendered indented and `null` values are ommited
+- `_jsonPrettify(param)`: same as built-in jsonStringify(), but `JSON` rendered indented and `null` values are omitted
 - `_colorUri(hex_rgb)`: generates data uri with one-pixel image of specified color. Parameter must be string with hex color in `RRGGBB` form. Because `AdaptiveCard` doesn't support background color but supports background image, this function could be used to emulate background color using background image.
 
 ## Extra Links

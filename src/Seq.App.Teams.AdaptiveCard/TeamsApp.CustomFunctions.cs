@@ -8,7 +8,7 @@ namespace Seq.App.Teams;
 
 public sealed partial class TeamsApp
 {
-    private static readonly Dictionary<(int, int, int), string> _colors = new();
+    private static readonly Dictionary<(int, int, int), string> _colors = [];
 
     public static void RegisterCustomFunctions()
     {

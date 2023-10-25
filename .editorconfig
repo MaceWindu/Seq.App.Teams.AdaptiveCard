@@ -5,6 +5,7 @@ indent_style = space
 indent_size = 4
 end_of_line = crlf
 insert_final_newline = false
+spelling_exclusion_path = spellcheck.txt
 
 [*.cs]
 dotnet_analyzer_diagnostic.severity = error
@@ -12,7 +13,6 @@ dotnet_code_quality.api_surface = all
 
 dotnet_diagnostic.CA1002.severity = none # CA1002: Do not expose generic lists
 dotnet_code_quality.CA1002.api_surface = public,internal
-
 
 dotnet_diagnostic.CA1031.severity = none # CA1031: Do not catch general exception types
 
@@ -22,13 +22,11 @@ dotnet_code_quality.CA1054.api_surface = all
 dotnet_diagnostic.CA1056.severity = none # CA1056: URI properties should not be strings
 dotnet_code_quality.CA1056.api_surface = all
 
-
 dotnet_diagnostic.CA1062.severity = none # CA1062: Validate arguments of public methods
 dotnet_code_quality.CA1062.api_surface = all
 
 dotnet_diagnostic.CA1707.severity = none # CA1707: Identifiers should not contain underscores
 dotnet_code_quality.CA1707.api_surface = all
-
 
 dotnet_diagnostic.CA2227.severity = none # CA2227: Collection properties should be read only
 
@@ -48,34 +46,34 @@ dotnet_diagnostic.IDE1006.severity = error # Naming rule violation
 
 # styles
 dotnet_naming_style.style_pascal_case.capitalization = pascal_case
-dotnet_naming_style.style_pascal_case.required_suffix = 
-dotnet_naming_style.style_pascal_case.required_prefix = 
-dotnet_naming_style.style_pascal_case.word_separator = 
+dotnet_naming_style.style_pascal_case.required_suffix =
+dotnet_naming_style.style_pascal_case.required_prefix =
+dotnet_naming_style.style_pascal_case.word_separator =
 
 dotnet_naming_style.style_i_pascal_case.capitalization = pascal_case
-dotnet_naming_style.style_i_pascal_case.required_suffix = 
+dotnet_naming_style.style_i_pascal_case.required_suffix =
 dotnet_naming_style.style_i_pascal_case.required_prefix = I
-dotnet_naming_style.style_i_pascal_case.word_separator = 
+dotnet_naming_style.style_i_pascal_case.word_separator =
 
 dotnet_naming_style.style_t_pascal_case.capitalization = pascal_case
-dotnet_naming_style.style_t_pascal_case.required_suffix = 
+dotnet_naming_style.style_t_pascal_case.required_suffix =
 dotnet_naming_style.style_t_pascal_case.required_prefix = T
-dotnet_naming_style.style_t_pascal_case.word_separator = 
+dotnet_naming_style.style_t_pascal_case.word_separator =
 
 dotnet_naming_style.style_all_caps.capitalization = all_upper
-dotnet_naming_style.style_all_caps.required_suffix = 
-dotnet_naming_style.style_all_caps.required_prefix = 
+dotnet_naming_style.style_all_caps.required_suffix =
+dotnet_naming_style.style_all_caps.required_prefix =
 dotnet_naming_style.style_all_caps.word_separator = _
 
 dotnet_naming_style.style_underscore_camel_case.capitalization = camel_case
-dotnet_naming_style.style_underscore_camel_case.required_suffix = 
+dotnet_naming_style.style_underscore_camel_case.required_suffix =
 dotnet_naming_style.style_underscore_camel_case.required_prefix = _
-dotnet_naming_style.style_underscore_camel_case.word_separator = 
+dotnet_naming_style.style_underscore_camel_case.word_separator =
 
 dotnet_naming_style.style_camel_case.capitalization = camel_case
-dotnet_naming_style.style_camel_case.required_suffix = 
-dotnet_naming_style.style_camel_case.required_prefix = 
-dotnet_naming_style.style_camel_case.word_separator = 
+dotnet_naming_style.style_camel_case.required_suffix =
+dotnet_naming_style.style_camel_case.required_prefix =
+dotnet_naming_style.style_camel_case.word_separator =
 
 # symbols
 dotnet_naming_symbols.symbols_allways_pascal_case.applicable_kinds = namespace,class,struct,enum,property,method,event,delegate
