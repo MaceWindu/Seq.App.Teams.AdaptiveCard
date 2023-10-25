@@ -37,7 +37,6 @@ stages:
       displayName: 'Install .NET 8'
       inputs:
         includePreviewVersions: true
-        packageType: sdk
         version: 8.x
 
     - task: PowerShell@2
