@@ -3,7 +3,7 @@
     <PropertyGroup>
         <Configurations>Debug;Release</Configurations>
 
-        <LangVersion>11.0</LangVersion>
+        <LangVersion>latest</LangVersion>
         <Nullable>enable</Nullable>
         <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
         <Features>strict</Features>
@@ -21,6 +21,8 @@
         <AnalysisLevel>preview-All</AnalysisLevel>
         <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
         <ReportAnalyzer>true</ReportAnalyzer>
+
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
     </PropertyGroup>
 
     <ItemGroup Label="External Code Analyzers">

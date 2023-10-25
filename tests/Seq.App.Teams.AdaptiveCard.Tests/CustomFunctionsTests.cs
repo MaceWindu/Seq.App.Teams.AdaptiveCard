@@ -15,9 +15,9 @@ public sealed class CustomFunctionsTests
     [TestCase("[link](http://local.host)", "\"[link\\\\](http://local.host)\"")]
     public void TestNoMarkdown(object? value, string expected)
     {
-        var tmpl = new AdaptiveCardTemplate($"{{\"key\":\"${{_nomd(val)}}\"}}");
-        var result = tmpl.Expand(new { val = value });
-        var errors = tmpl.GetLastTemplateExpansionWarnings();
+        var cardTemplate = new AdaptiveCardTemplate($"{{\"key\":\"${{_nomd(val)}}\"}}");
+        var result = cardTemplate.Expand(new { val = value });
+        var errors = cardTemplate.GetLastTemplateExpansionWarnings();
 
         Assert.That(errors, Is.Empty);
         Assert.That(result, Is.EqualTo($"{{\"key\":{expected}}}"));
@@ -27,9 +27,9 @@ public sealed class CustomFunctionsTests
     [Test]
     public void TestJsonFormatting()
     {
-        var tmpl = new AdaptiveCardTemplate($"{{\"key\":\"${{_jsonPrettify(val)}}\"}}");
-        var result = tmpl.Expand(new { val = new { one = 1, two = "two", three = (string?)null } });
-        var errors = tmpl.GetLastTemplateExpansionWarnings();
+        var cardTemplate = new AdaptiveCardTemplate($"{{\"key\":\"${{_jsonPrettify(val)}}\"}}");
+        var result = cardTemplate.Expand(new { val = new { one = 1, two = "two", three = (string?)null } });
+        var errors = cardTemplate.GetLastTemplateExpansionWarnings();
 
         Assert.That(errors, Is.Empty);
         Assert.That(result, Is.EqualTo(/*lang=json,strict*/ "{\"key\":\"{\\n\\n⠀⠀\\\"one\\\": 1,\\n\\n⠀⠀\\\"two\\\": \\\"two\\\",\\n\\n⠀⠀\\\"three\\\": null\\n\\n}\"}"));
@@ -47,9 +47,9 @@ public sealed class CustomFunctionsTests
     [TestCase("123", "")]
     public void TestColorFunction(object? color, string expected)
     {
-        var tmpl = new AdaptiveCardTemplate($"{{\"key\":\"${{_colorUri(color)}}\"}}");
-        var result = tmpl.Expand(new { color });
-        var errors = tmpl.GetLastTemplateExpansionWarnings();
+        var cardTemplate = new AdaptiveCardTemplate($"{{\"key\":\"${{_colorUri(color)}}\"}}");
+        var result = cardTemplate.Expand(new { color });
+        var errors = cardTemplate.GetLastTemplateExpansionWarnings();
 
         Assert.That(errors, Is.Empty);
         Assert.That(result, Is.EqualTo($"{{\"key\":\"{expected}\"}}"));

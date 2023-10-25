@@ -35,7 +35,7 @@ public sealed partial class TeamsApp
         var data = new Dictionary<string, object?>()
         {
             { "Id", evt.Id },
-            { "TimeStamp", evt.TimestampUtc.ToString("O") },
+            { "TimeStamp", evt.Timestamp.ToString("O") },
             { "Level", evt.Data.Level.ToString() },
             { "MessageTemplate", evt.Data.MessageTemplate },
             { "Message", evt.Data.RenderedMessage },
@@ -149,7 +149,7 @@ public sealed partial class TeamsApp
         }
         catch (Exception ex)
         {
-            _log.Error(ex, "An error occured while constructing the request");
+            _log.Error(ex, "An error occurred while constructing the request");
         }
     }
 }

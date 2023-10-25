@@ -2,11 +2,11 @@ variables:
   - name: solution
     value: Seq.App.Teams.AdaptiveCard.sln
   - name: assemblyVersion
-    value: 1.1.0
+    value: 1.2.0
   - name: packageVersion
-    value: 1.1.0
+    value: 1.2.0
   - name: nugetDevVersion
-    value: 1.1.0
+    value: 1.2.1
 
 trigger:
   - master
@@ -23,7 +23,7 @@ stages:
   jobs:
   - job: main_job
     pool:
-      vmImage: 'windows-2022'
+      vmImage: 'ubuntu-latest'
     displayName: 'Seq.App.Teams.AdaptiveCard'
 
     steps:
@@ -31,8 +31,11 @@ stages:
 #########
 # BUILD #
 #########
-    - task: NuGetToolInstaller@1
-      displayName: Install latest nuget tools
+    - task: UseDotNet@2
+      displayName: 'Install .NET 8'
+      inputs:
+        includePreviewVersions: true
+        version: 8.x
 
     - task: PowerShell@2
       inputs:
@@ -41,12 +44,12 @@ stages:
         arguments: -path $(Build.SourcesDirectory)/src/Seq.App.Teams.AdaptiveCard/Seq.App.Teams.AdaptiveCard.csproj -version $(assemblyVersion)
       displayName: Update assembly version
 
-    - task: MSBuild@1
+    - task: DotNetCoreCLI@2
       inputs:
-        solution: '$(solution)'
-        configuration: 'Release'
-        msbuildArguments: '/t:Restore;Rebuild -m /p:ContinuousIntegrationBuild=true'
-      displayName: Build solution
+        command: 'build'
+        projects: '$(solution)'
+        arguments: '-property:ContinuousIntegrationBuild=true --configuration $(build_configuration)'
+      displayName: Build Solution
 
     - task: DotNetCoreCLI@2
       inputs:
@@ -58,41 +61,20 @@ stages:
         nobuild: true
       displayName: Publish project
 
-    - task: DotNetCoreCLI@2
-      inputs:
-        command: 'publish'
-        projects: '$(Build.SourcesDirectory)/tests/Seq.App.Teams.AdaptiveCard.Tests/Seq.App.Teams.AdaptiveCard.Tests.csproj'
-        publishWebProjects: false
-        zipAfterPublish: false
-        arguments: -f net7.0 -c Release
-        nobuild: true
-      displayName: Publish test project for net7.0
-
 ########
 # TEST #
 ########
-    - task: UseDotNet@2
-      displayName: 'Install .net 7'
-      inputs:
-        packageType: sdk
-        version: 7.x
 
-    - script: dotnet test $(Build.SourcesDirectory)\tests\Seq.App.Teams.AdaptiveCard.Tests\bin\Release\net7.0\Seq.App.Teams.AdaptiveCard.Tests.dll /Framework:net7.0 /logger:trx
-      displayName: 'Tests: .NET 7'
+    - script: dotnet test $(Build.SourcesDirectory)/$(solution) -c $(build_configuration) -l trx
+      displayName: 'Run Tests'
       condition: succeededOrFailed()
 
     - task: PublishTestResults@2
       inputs:
         testRunner: VsTest
         testResultsFiles: '**/*.trx'
-        testRunTitle: '.NET 7'
+        testRunTitle: 'Tests'
       displayName: 'Publish test results'
-      condition: succeededOrFailed()
-
-    - task: DeleteFiles@1
-      inputs:
-        contents: '**/*.trx'
-      displayName: 'Cleanup'
       condition: succeededOrFailed()
 
 ##########################
@@ -111,14 +93,14 @@ stages:
 
     - task: CmdLine@2
       inputs:
-        script: nuget.exe Pack $(Build.SourcesDirectory)\ci\Seq.App.Teams.AdaptiveCard.nuspec -OutputDirectory $(Build.SourcesDirectory)\built
+        script: nuget.exe Pack $(Build.SourcesDirectory)/ci/Seq.App.Teams.AdaptiveCard.nuspec -OutputDirectory $(Build.SourcesDirectory)/built
         workingDirectory: $(Build.SourcesDirectory)/ci
       displayName: Build nuget for artifacts
       condition: and(succeeded(), ne(variables['Build.SourceBranchName'], 'release'))
 
     - task: CmdLine@2
       inputs:
-        script: nuget.exe Pack $(Build.SourcesDirectory)\ci\Seq.App.Teams.AdaptiveCard.nuspec -OutputDirectory $(Build.SourcesDirectory)\built -Symbols -SymbolPackageFormat snupkg
+        script: nuget.exe Pack $(Build.SourcesDirectory)/ci/Seq.App.Teams.AdaptiveCard.nuspec -OutputDirectory $(Build.SourcesDirectory)/built -Symbols -SymbolPackageFormat snupkg
         workingDirectory: $(Build.SourcesDirectory)/ci
       displayName: Build nuget for nuget.org
       condition: and(succeeded(), eq(variables['Build.SourceBranchName'], 'release'))
