@@ -15,7 +15,7 @@ public sealed class TemplateTests
     private static readonly Event<LogEventData> _event = new(
         id: "event-id",
         eventType: uint.MaxValue,
-        timestampUtc: new DateTime(2020, 1, 22, 18, 19, 59, 123, DateTimeKind.Utc).AddTicks(4567),
+        timestamp: new DateTime(2020, 1, 22, 18, 19, 59, 123, DateTimeKind.Utc).AddTicks(4567),
         new LogEventData()
         {
             Id = "some-other-id",
@@ -37,14 +37,13 @@ data",
             }
         });
 
-
     [Test]
     public void TestDefaultTemplate()
     {
         var data = new Dictionary<string, object?>()
         {
             { "Id", _event.Id },
-            { "TimeStamp", _event.TimestampUtc.ToString("O") },
+            { "TimeStamp", _event.Timestamp.ToString("O") },
             { "Level", _event.Data.Level.ToString() },
             { "MessageTemplate", _event.Data.MessageTemplate },
             { "Message", _event.Data.RenderedMessage },
@@ -60,9 +59,9 @@ data",
         using var reader = new StreamReader(stream);
         var template = reader.ReadToEnd();
 
-        var tmpl = new AdaptiveCardTemplate(template);
-        var result = tmpl.Expand(data);
-        var errors = tmpl.GetLastTemplateExpansionWarnings();
+        var cardTemplate = new AdaptiveCardTemplate(template);
+        var result = cardTemplate.Expand(data);
+        var errors = cardTemplate.GetLastTemplateExpansionWarnings();
 
         Assert.That(errors, Is.Empty);
         Assert.That(result.Count(c => c == '$'), Is.EqualTo(1));
@@ -75,7 +74,7 @@ data",
         var data = new Dictionary<string, object?>()
         {
             { "Id", _event.Id },
-            { "TimeStamp", _event.TimestampUtc.ToString("O") },
+            { "TimeStamp", _event.Timestamp.ToString("O") },
             { "Level", _event.Data.Level.ToString() },
             { "MessageTemplate", _event.Data.MessageTemplate },
             { "Message", _event.Data.RenderedMessage },
@@ -91,9 +90,9 @@ data",
         using var reader = new StreamReader(stream);
         var template = reader.ReadToEnd();
 
-        var tmpl = new AdaptiveCardTemplate(template);
-        var result = tmpl.Expand(data);
-        var errors = tmpl.GetLastTemplateExpansionWarnings();
+        var cardTemplate = new AdaptiveCardTemplate(template);
+        var result = cardTemplate.Expand(data);
+        var errors = cardTemplate.GetLastTemplateExpansionWarnings();
 
         Assert.That(errors, Is.Empty);
         Assert.That(result.Count(c => c == '$'), Is.EqualTo(1));
@@ -142,7 +141,7 @@ data",
         var data = new Dictionary<string, object?>()
         {
             { "Id", _event.Id },
-            { "TimeStamp", _event.TimestampUtc.ToString("O") },
+            { "TimeStamp", _event.Timestamp.ToString("O") },
             { "Level", _event.Data.Level.ToString() },
             { "MessageTemplate", _event.Data.MessageTemplate },
             { "Message", _event.Data.RenderedMessage },
@@ -158,9 +157,9 @@ data",
         using var reader = new StreamReader(stream);
         var template = reader.ReadToEnd();
 
-        var tmpl = new AdaptiveCardTemplate(template);
-        var result = tmpl.Expand(data);
-        var errors = tmpl.GetLastTemplateExpansionWarnings();
+        var cardTemplate = new AdaptiveCardTemplate(template);
+        var result = cardTemplate.Expand(data);
+        var errors = cardTemplate.GetLastTemplateExpansionWarnings();
 
         Assert.That(errors, Is.Empty);
         Assert.That(result.Count(c => c == '$'), Is.EqualTo(1));
@@ -199,7 +198,7 @@ data",
         var data = new Dictionary<string, object?>()
         {
             { "Id", _event.Id },
-            { "TimeStamp", _event.TimestampUtc.ToString("O") },
+            { "TimeStamp", _event.Timestamp.ToString("O") },
             { "Level", _event.Data.Level.ToString() },
             { "MessageTemplate", _event.Data.MessageTemplate },
             { "Message", _event.Data.RenderedMessage },
@@ -215,9 +214,9 @@ data",
         using var reader = new StreamReader(stream);
         var template = reader.ReadToEnd();
 
-        var tmpl = new AdaptiveCardTemplate(template);
-        var result = tmpl.Expand(data);
-        var errors = tmpl.GetLastTemplateExpansionWarnings();
+        var cardTemplate = new AdaptiveCardTemplate(template);
+        var result = cardTemplate.Expand(data);
+        var errors = cardTemplate.GetLastTemplateExpansionWarnings();
 
         Assert.That(errors, Is.Empty);
         Assert.That(result.Count(c => c == '$'), Is.EqualTo(1));
