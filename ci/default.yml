@@ -51,12 +51,13 @@ stages:
     - task: DotNetCoreCLI@2
       inputs:
         command: 'publish'
-        projects: '$(Build.SourcesDirectory)/src/Seq.App.Teams.AdaptiveCard/Seq.App.Teams.AdaptiveCard.csproj -- output $(Build.SourcesDirectory)/.build/publish'
+        projects: '$(Build.SourcesDirectory)/src/Seq.App.Teams.AdaptiveCard/Seq.App.Teams.AdaptiveCard.csproj'
         publishWebProjects: false
         zipAfterPublish: false
         arguments: -f netstandard2.0 -c Release
         nobuild: true
         modifyOutputPath: false
+        packDirectory: '$(Build.SourcesDirectory)/.build/publish'
       displayName: Publish project
 
 ################
