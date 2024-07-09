@@ -133,16 +133,7 @@ public sealed partial class TeamsApp
 
             var template = new AdaptiveCardTemplate(string.IsNullOrWhiteSpace(CardTemplate) ? _defaultTemplate : CardTemplate);
 
-            var payload = BuildPayload(evt);
-
-            if (TraceEnabled)
-            {
-                _log.Debug("Payload: {json}", payload);
-            }
-
-            // TODO:RESTORE: broken in 2.0.0 engine
-            //var bodyJson = template.Expand(payload);
-            var bodyJson = template.Expand(Newtonsoft.Json.JsonConvert.SerializeObject(payload));
+            var bodyJson = template.Expand(BuildPayload(evt));
 
             if (TraceEnabled)
             {
