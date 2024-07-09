@@ -56,6 +56,7 @@ stages:
         zipAfterPublish: false
         arguments: -f netstandard2.0 -c Release -o $(Build.SourcesDirectory)/.build/publish
         nobuild: true
+        modifyOutputPath: false
       displayName: Publish project
 
 ################
