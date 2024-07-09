@@ -17,6 +17,9 @@
 
         <dependencies>
             <group targetFramework=".NETStandard2.0">
+                <dependency id="Seq.Apps"                 version="2023.4.0" />
+                <dependency id="AdaptiveCards.Templating" version="2.0.0"    />
+                <dependency id="Newtonsoft.Json"          version="13.0.3"   />
             </group>
         </dependencies>
     </metadata>
@@ -31,10 +34,11 @@
         <file src="../.build/bin/Seq.App.Teams.AdaptiveCard/Release/Seq.App.Teams.AdaptiveCard.dll" target="lib/netstandard2.0/" />
 
         <!--seq doesn't resolve nuget dependencies or does it incorrectly-->
-        <file src="../.build/publish/AdaptiveCards.Templating.dll"                             target="lib/netstandard2.0/" />
-        <file src="../.build/publish/Microsoft.Bot.AdaptiveExpressions.Core.dll"               target="lib/netstandard2.0/" />
+        <!--<file src="../.build/publish/AdaptiveCards.Templating.dll"                             target="lib/netstandard2.0/" />
         <file src="../.build/publish/Antlr4.Runtime.Standard.dll"                              target="lib/netstandard2.0/" />
+        <file src="../.build/publish/Microsoft.Bot.AdaptiveExpressions.Core.dll"               target="lib/netstandard2.0/" />
         <file src="../.build/publish/Microsoft.Recognizers.Text.DataTypes.TimexExpression.dll" target="lib/netstandard2.0/" />
+        <file src="../.build/publish/Json.More.dll"                                            target="lib/netstandard2.0/" />-->
 
     </files>
 </package>
