@@ -1,4 +1,5 @@
 ﻿using AdaptiveCards.Templating;
+using Newtonsoft.Json;
 using Seq.Apps;
 using Seq.Apps.LogEvents;
 using System;
@@ -140,9 +141,9 @@ public sealed partial class TeamsApp
                 _log.Debug("Payload: {json}", payload);
             }
 
-            // doesn't work currently with v2
+            // TODO:RESTORE: broken in 2.0.0 engine
             //var bodyJson = template.Expand(payload);
-            var bodyJson = template.Expand(JsonSerializer.Serialize(payload));
+            var bodyJson = template.Expand(JsonConvert.SerializeObject(payload));
 
             if (TraceEnabled)
             {
