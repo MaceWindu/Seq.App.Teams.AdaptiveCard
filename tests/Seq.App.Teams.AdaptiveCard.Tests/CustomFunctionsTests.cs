@@ -4,7 +4,7 @@ using System.Text.Json;
 
 namespace Seq.App.Teams.Tests;
 
-public sealed class CustomFunctionsTests
+internal sealed class CustomFunctionsTests
 {
     [TestCase(null, "\"${val}\"")]
     [TestCase(123, "123")]
@@ -32,14 +32,14 @@ public sealed class CustomFunctionsTests
         var errors = cardTemplate.GetLastTemplateExpansionWarnings();
 
         Assert.That(errors, Is.Empty);
-        Assert.That(result, Is.EqualTo(/*lang=json,strict*/ "{\"key\":\"{\\n\\n⠀⠀\\\"one\\\": 1,\\n\\n⠀⠀\\\"two\\\": \\\"two\\\",\\n\\n⠀⠀\\\"three\\\": null\\n\\n}\"}"));
+        Assert.That(result, Is.EqualTo(/*lang=json,strict*/ "{\"key\":\"{\\n\\n\\u2800\\u2800\\u0022one\\u0022: 1,\\n\\n\\u2800\\u2800\\u0022two\\u0022: \\u0022two\\u0022,\\n\\n\\u2800\\u2800\\u0022three\\u0022: null\\n\\n}\"}"));
         Assert.DoesNotThrow(() => JsonDocument.Parse(result));
     }
 
     [TestCase("222222", "data:image/gif;base64,R0lGODlhAQABAIAAACIiIgAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==")]
     [TestCase("921b3c", "data:image/gif;base64,R0lGODlhAQABAIAAAJIbPAAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==")]
     [TestCase("921B3C", "data:image/gif;base64,R0lGODlhAQABAIAAAJIbPAAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==")]
-    [TestCase("ffb748", "data:image/gif;base64,R0lGODlhAQABAIAAAP+3SAAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==")]
+    [TestCase("ffb748", "data:image/gif;base64,R0lGODlhAQABAIAAAP\\u002B3SAAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==")]
     [TestCase("016DA9", "data:image/gif;base64,R0lGODlhAQABAIAAAAFtqQAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==")]
     [TestCase("777777", "data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==")]
     [TestCase(null, "")]

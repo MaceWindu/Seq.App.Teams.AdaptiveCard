@@ -17,7 +17,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\src\Seq.App.Teams.AdaptiveCard\Seq.App.Teams.AdaptiveCard.csproj" />
+        <ProjectReference Include="../../src/Seq.App.Teams.AdaptiveCard/Seq.App.Teams.AdaptiveCard.csproj" />
     </ItemGroup>
 
 </Project>

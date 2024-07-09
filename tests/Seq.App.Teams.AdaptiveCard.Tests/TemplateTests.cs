@@ -10,7 +10,7 @@ using System.Text.Json;
 
 namespace Seq.App.Teams.Tests;
 
-public sealed class TemplateTests
+internal sealed class TemplateTests
 {
     private static readonly Event<LogEventData> _event = new(
         id: "event-id",

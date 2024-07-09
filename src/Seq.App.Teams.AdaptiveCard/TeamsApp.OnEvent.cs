@@ -1,5 +1,4 @@
 ﻿using AdaptiveCards.Templating;
-using Newtonsoft.Json;
 using Seq.Apps;
 using Seq.Apps.LogEvents;
 using System;
@@ -8,6 +7,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Seq.App.Teams;
@@ -82,7 +82,7 @@ public sealed partial class TeamsApp
 
         if (TraceEnabled)
         {
-            _log.Information("Template data: {json}", JsonConvert.SerializeObject(data));
+            _log.Information("Template data: {json}", JsonSerializer.Serialize(data));
         }
 
         return data;

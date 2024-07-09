@@ -8,7 +8,7 @@ using System.Text.Json;
 
 namespace Seq.App.Teams.Tests;
 
-public sealed class RenderingTests
+internal sealed class RenderingTests
 {
     private static readonly Event<LogEventData> _event = new(
         id: "event-id",
@@ -44,7 +44,7 @@ data",
     [TestCase(/*lang=json,strict*/ "{ \"key\": \"${TimestampUtc}\"}", /*lang=json,strict*/ "{\"key\":\"2020-01-22T18:19:59.1234567Z\"}")]
     [TestCase(/*lang=json,strict*/ "{ \"key\": \"${Data.Id}\"}", /*lang=json,strict*/ "{\"key\":\"some-other-id\"}")]
     [TestCase(/*lang=json,strict*/ "{ \"$data\": \"${Data}\", \"key\": \"${Id}\"}", /*lang=json,strict*/ "{\"key\":\"some-other-id\"}")]
-    [TestCase(/*lang=json,strict*/ "{ \"key\": \"${Data.LocalTimestamp}\"}", /*lang=json,strict*/ "{\"key\":\"2020-01-22T18:19:59.1234567+00:45\"}")]
+    [TestCase(/*lang=json,strict*/ "{ \"key\": \"${Data.LocalTimestamp}\"}", "{\"key\":\"2020-01-22T18:19:59.1234567\\u002B00:45\"}")]
     [TestCase(/*lang=json,strict*/ "{ \"key\": \"${Data.Level}\"}", /*lang=json,strict*/ "{\"key\":5}")]
     [TestCase(/*lang=json,strict*/ "{ \"key\": \"${Data.MessageTemplate}\"}", /*lang=json,strict*/ "{\"key\":\"template {message}\"}")]
     [TestCase(/*lang=json,strict*/ "{ \"key\": \"${Data.RenderedMessage}\"}", /*lang=json,strict*/ "{\"key\":\"rendered message\"}")]
@@ -90,7 +90,7 @@ data",
         var errors = cardTemplate.GetLastTemplateExpansionWarnings();
 
         Assert.That(errors, Is.Empty);
-        Assert.That(result, Is.EqualTo(/*lang=json,strict*/ "{\"key\":\"{\\\"one\\\":1,\\\"two\\\":\\\"two\\\",\\\"three\\\":null}\"}"));
+        Assert.That(result, Is.EqualTo(/*lang=json,strict*/ "{\"key\":\"{\\u0022one\\u0022:1,\\u0022two\\u0022:\\u0022two\\u0022,\\u0022three\\u0022:null}\"}"));
         Assert.DoesNotThrow(() => JsonDocument.Parse(result));
     }
 
@@ -102,7 +102,7 @@ data",
         var errors = cardTemplate.GetLastTemplateExpansionWarnings();
 
         Assert.That(errors, Is.Empty);
-        Assert.That(result, Is.EqualTo(/*lang=json,strict*/ "{\"key\":\"[1,\\\"two\\\",null]\"}"));
+        Assert.That(result, Is.EqualTo(/*lang=json,strict*/ "{\"key\":\"[1,\\u0022two\\u0022,null]\"}"));
         Assert.DoesNotThrow(() => JsonDocument.Parse(result));
     }
 }

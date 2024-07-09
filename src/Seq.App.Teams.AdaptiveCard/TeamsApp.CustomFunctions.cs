@@ -1,8 +1,10 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.Bot.AdaptiveExpressions.Core;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Text.Json.Nodes;
 
 namespace Seq.App.Teams;
 
@@ -13,7 +15,7 @@ public sealed partial class TeamsApp
     public static void RegisterCustomFunctions()
     {
         // _nomd function escapes markdown control characters to disable markdown
-        AdaptiveExpressions.Expression.Functions.Add("_nomd", args =>
+        Expression.Functions.Add("_nomd", args =>
         {
             var input = args[0];
 
@@ -36,7 +38,7 @@ public sealed partial class TeamsApp
             return input;
         });
 
-        AdaptiveExpressions.Expression.Functions.Add("_jsonPrettify", args =>
+        Expression.Functions.Add("_jsonPrettify", args =>
         {
             using var sw = new StringWriter();
 
@@ -57,14 +59,16 @@ public sealed partial class TeamsApp
                     NullValueHandling = NullValueHandling.Ignore
                 };
 
-                serializer.Serialize(jtw, args[0]);
+                var data = args[0] is JsonNode n ? JsonConvert.DeserializeObject(n.ToJsonString()) : args[0];
+
+                serializer.Serialize(jtw, data);
             }
 
             sw.Flush();
             return sw.ToString();
         });
 
-        AdaptiveExpressions.Expression.Functions.Add("_colorUri", args =>
+        Expression.Functions.Add("_colorUri", args =>
         {
             if (args[0] is string colorString
                 && colorString.Length == 6
