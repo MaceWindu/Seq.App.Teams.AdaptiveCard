@@ -54,10 +54,8 @@ stages:
         projects: '$(Build.SourcesDirectory)/src/Seq.App.Teams.AdaptiveCard/Seq.App.Teams.AdaptiveCard.csproj'
         publishWebProjects: false
         zipAfterPublish: false
-        arguments: -f netstandard2.0 -c Release
+        arguments: -f netstandard2.0 -c Release -o $(Build.SourcesDirectory)/.build/publish
         nobuild: true
-        modifyOutputPath: false
-        packDirectory: '$(Build.SourcesDirectory)/.build/publish'
       displayName: Publish project
 
 ################
