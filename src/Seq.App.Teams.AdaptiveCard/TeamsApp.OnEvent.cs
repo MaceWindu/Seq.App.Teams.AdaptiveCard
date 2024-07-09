@@ -88,7 +88,7 @@ public sealed partial class TeamsApp
         return data;
     }
 
-    private async Task SendCart(string card)
+    private async Task SendCard(string card)
     {
         using var client = new HttpClient(_httpClientHandler, disposeHandler: false)
         {
@@ -132,7 +132,17 @@ public sealed partial class TeamsApp
             }
 
             var template = new AdaptiveCardTemplate(string.IsNullOrWhiteSpace(CardTemplate) ? _defaultTemplate : CardTemplate);
-            var bodyJson = template.Expand(BuildPayload(evt));
+
+            var payload = BuildPayload(evt);
+
+            if (TraceEnabled)
+            {
+                _log.Debug("Payload: {json}", payload);
+            }
+
+            // doesn't work currently with v2
+            //var bodyJson = template.Expand(payload);
+            var bodyJson = template.Expand(JsonSerializer.Serialize(payload));
 
             if (TraceEnabled)
             {
@@ -145,7 +155,7 @@ public sealed partial class TeamsApp
                 _log.Warning("AdaptiveCard template warning: {Warning}", warn);
             }
 
-            await SendCart(bodyJson).ConfigureAwait(false);
+            await SendCard(bodyJson).ConfigureAwait(false);
         }
         catch (Exception ex)
         {
