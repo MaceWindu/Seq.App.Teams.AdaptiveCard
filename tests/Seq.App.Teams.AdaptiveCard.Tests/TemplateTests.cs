@@ -283,13 +283,11 @@ data",
 
         var cardTemplate = new AdaptiveCardTemplate(template);
 
-        Assert.That(() => cardTemplate.Expand(data), Throws.Exception.With.Message.EqualTo("Invalid expression format."));
+        var result = cardTemplate.Expand(data);
+        var errors = cardTemplate.GetLastTemplateExpansionWarnings();
 
-        //var result = cardTemplate.Expand(data);
-        //var errors = cardTemplate.GetLastTemplateExpansionWarnings();
-
-        //Assert.That(errors, Is.Empty);
-        //Assert.That(result.Count(c => c == '$'), Is.EqualTo(1));
-        //Assert.DoesNotThrow(() => JsonDocument.Parse(result));
+        Assert.That(errors, Is.Empty);
+        Assert.That(result.Count(c => c == '$'), Is.EqualTo(1));
+        Assert.DoesNotThrow(() => JsonDocument.Parse(result));
     }
 }
