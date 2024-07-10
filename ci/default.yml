@@ -4,11 +4,11 @@ variables:
   - name: build_configuration
     value: Release
   - name: assemblyVersion
-    value: 1.2.0
+    value: 2.0.0
   - name: packageVersion
-    value: 1.2.0
+    value: 2.0.0
   - name: nugetDevVersion
-    value: 1.2.1
+    value: 2.0.1
 
 trigger:
   - master
@@ -33,11 +33,6 @@ stages:
 #########
 # BUILD #
 #########
-    - task: UseDotNet@2
-      displayName: 'Install .NET 8'
-      inputs:
-        includePreviewVersions: true
-        version: 8.x
 
     - task: PowerShell@2
       inputs:
@@ -59,9 +54,45 @@ stages:
         projects: '$(Build.SourcesDirectory)/src/Seq.App.Teams.AdaptiveCard/Seq.App.Teams.AdaptiveCard.csproj'
         publishWebProjects: false
         zipAfterPublish: false
-        arguments: -f netstandard2.0 -c Release
+        arguments: -f netstandard2.0 -c Release -o $(Build.SourcesDirectory)/.build/publish
         nobuild: true
+        modifyOutputPath: false
       displayName: Publish project
+
+################
+# CREATE NUGET #
+################
+
+    - powershell: echo "##vso[task.setvariable variable=packageVersion]$(nugetDevVersion)-rc.$(Build.BuildId)"
+      displayName: Update nuget version
+      condition: and(succeeded(), ne(variables['Build.SourceBranchName'], 'release'))
+
+    - task: PowerShell@2
+      inputs:
+        filePath: '$(Build.SourcesDirectory)/ci/BuildNuspecs.ps1'
+        workingDirectory: '$(Build.SourcesDirectory)'
+        arguments: -path $(Build.SourcesDirectory)/ci/Seq.App.Teams.AdaptiveCard.nuspec -version $(packageVersion) -branch $(Build.SourceBranchName)
+      displayName: Update nuspecs
+
+    - task: CmdLine@2
+      inputs:
+        script: nuget pack $(Build.SourcesDirectory)/ci/Seq.App.Teams.AdaptiveCard.nuspec -OutputDirectory $(Build.SourcesDirectory)/.build/nuget
+        workingDirectory: $(Build.SourcesDirectory)/ci
+      displayName: Build nuget for artifacts
+      condition: and(succeeded(), ne(variables['Build.SourceBranchName'], 'release'))
+
+    - task: CmdLine@2
+      inputs:
+        script: nuget pack $(Build.SourcesDirectory)/ci/Seq.App.Teams.AdaptiveCard.nuspec -OutputDirectory $(Build.SourcesDirectory)/.build/nuget -Symbols -SymbolPackageFormat snupkg
+        workingDirectory: $(Build.SourcesDirectory)/ci
+      displayName: Build nuget for nuget.org
+      condition: and(succeeded(), eq(variables['Build.SourceBranchName'], 'release'))
+
+    - task: PublishBuildArtifacts@1
+      inputs:
+        pathToPublish: '$(Build.SourcesDirectory)/.build/nuget'
+        artifactName: 'nuget'
+      displayName: Publish nuget to artifacts
 
 ########
 # TEST #
@@ -76,47 +107,18 @@ stages:
         testRunner: VsTest
         testResultsFiles: '**/*.trx'
         testRunTitle: 'Tests'
+        failTaskOnMissingResultsFile: true
       displayName: 'Publish test results'
       condition: succeededOrFailed()
 
-##########################
-# CREATE / PUBLISH NUGET #
-##########################
-    - powershell: echo "##vso[task.setvariable variable=packageVersion]$(nugetDevVersion)-rc.$(Build.BuildId)"
-      displayName: Update nuget version
-      condition: and(succeeded(), ne(variables['Build.SourceBranchName'], 'release'))
-
-    - task: PowerShell@2
-      inputs:
-        filePath: '$(Build.SourcesDirectory)/ci/BuildNuspecs.ps1'
-        workingDirectory: '$(Build.SourcesDirectory)'
-        arguments: -path $(Build.SourcesDirectory)/ci/Seq.App.Teams.AdaptiveCard.nuspec -version $(packageVersion) -branch $(Build.SourceBranchName)
-      displayName: Update nuspecs
-
-    - task: CmdLine@2
-      inputs:
-        script: nuget pack $(Build.SourcesDirectory)/ci/Seq.App.Teams.AdaptiveCard.nuspec -OutputDirectory $(Build.SourcesDirectory)/built
-        workingDirectory: $(Build.SourcesDirectory)/ci
-      displayName: Build nuget for artifacts
-      condition: and(succeeded(), ne(variables['Build.SourceBranchName'], 'release'))
-
-    - task: CmdLine@2
-      inputs:
-        script: nuget pack $(Build.SourcesDirectory)/ci/Seq.App.Teams.AdaptiveCard.nuspec -OutputDirectory $(Build.SourcesDirectory)/built -Symbols -SymbolPackageFormat snupkg
-        workingDirectory: $(Build.SourcesDirectory)/ci
-      displayName: Build nuget for nuget.org
-      condition: and(succeeded(), eq(variables['Build.SourceBranchName'], 'release'))
-
-    - task: PublishBuildArtifacts@1
-      inputs:
-        pathToPublish: '$(Build.SourcesDirectory)/built'
-        artifactName: 'nuget'
-      displayName: Publish nuget to artifacts
+#################
+# PUBLISH NUGET #
+#################
 
     - task: NuGetCommand@2
       inputs:
         command: 'push'
-        packagesToPush: '$(Build.SourcesDirectory)/built/Seq.App.Teams.AdaptiveCard.*.nupkg'
+        packagesToPush: '$(Build.SourcesDirectory)/.build/nuget/Seq.App.Teams.AdaptiveCard.*.nupkg'
         nuGetFeedType: 'internal'
         publishVstsFeed: 'projects/projects'
       displayName: Publish to Azure Artifacts feed
@@ -125,7 +127,7 @@ stages:
     - task: NuGetCommand@2
       inputs:
         command: 'push'
-        packagesToPush: '$(Build.SourcesDirectory)/built/Seq.App.Teams.AdaptiveCard.*.nupkg'
+        packagesToPush: '$(Build.SourcesDirectory)/.build/nuget/Seq.App.Teams.AdaptiveCard.*.nupkg'
         nuGetFeedType: 'external'
         publishFeedCredentials: 'nuget.org'
       displayName: Publish to Nuget.org

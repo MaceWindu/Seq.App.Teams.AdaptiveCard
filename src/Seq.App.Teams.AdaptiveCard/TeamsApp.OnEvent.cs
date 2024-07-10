@@ -1,5 +1,4 @@
 ﻿using AdaptiveCards.Templating;
-using Newtonsoft.Json;
 using Seq.Apps;
 using Seq.Apps.LogEvents;
 using System;
@@ -8,6 +7,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Seq.App.Teams;
@@ -82,13 +82,13 @@ public sealed partial class TeamsApp
 
         if (TraceEnabled)
         {
-            _log.Information("Template data: {json}", JsonConvert.SerializeObject(data));
+            _log.Information("Template data: {json}", JsonSerializer.Serialize(data));
         }
 
         return data;
     }
 
-    private async Task SendCart(string card)
+    private async Task SendCard(string card)
     {
         using var client = new HttpClient(_httpClientHandler, disposeHandler: false)
         {
@@ -132,6 +132,7 @@ public sealed partial class TeamsApp
             }
 
             var template = new AdaptiveCardTemplate(string.IsNullOrWhiteSpace(CardTemplate) ? _defaultTemplate : CardTemplate);
+
             var bodyJson = template.Expand(BuildPayload(evt));
 
             if (TraceEnabled)
@@ -145,7 +146,7 @@ public sealed partial class TeamsApp
                 _log.Warning("AdaptiveCard template warning: {Warning}", warn);
             }
 
-            await SendCart(bodyJson).ConfigureAwait(false);
+            await SendCard(bodyJson).ConfigureAwait(false);
         }
         catch (Exception ex)
         {

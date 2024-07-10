@@ -23,6 +23,9 @@
         <ReportAnalyzer>true</ReportAnalyzer>
 
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
+
+        <ArtifactsPath>$(MSBuildThisFileDirectory).build</ArtifactsPath>
+        <ArtifactsPivots>$(Configuration)</ArtifactsPivots>
     </PropertyGroup>
 
     <ItemGroup Label="External Code Analyzers">
