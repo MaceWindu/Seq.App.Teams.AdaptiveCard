@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
-        <Version>1.0.0</Version>
+        <Version>2.0.0</Version>
 
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <NoWarn>CS1591</NoWarn>
@@ -14,12 +14,13 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <EmbeddedResource Include="Resources\default-template.json" />
+      <EmbeddedResource Include="Resources/default-template.json" />
     </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="Seq.Apps" />
         <PackageReference Include="AdaptiveCards.Templating" />
+        <PackageReference Include="Newtonsoft.Json" />
 
         <PackageReference Include="PolySharp" />
         <PackageReference Include="Microsoft.SourceLink.GitHub">

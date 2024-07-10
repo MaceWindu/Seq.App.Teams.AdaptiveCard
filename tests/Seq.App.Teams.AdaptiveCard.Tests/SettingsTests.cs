@@ -2,7 +2,7 @@
 
 namespace Seq.App.Teams.Tests;
 
-public sealed class SettingsTests
+internal sealed class SettingsTests
 {
     [TestCase("", null)]
     [TestCase(" ", null)]
