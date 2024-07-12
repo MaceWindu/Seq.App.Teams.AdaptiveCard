@@ -4,11 +4,11 @@ variables:
   - name: build_configuration
     value: Release
   - name: assemblyVersion
-    value: 2.1.0
+    value: 2.2.0
   - name: packageVersion
-    value: 2.1.0
+    value: 2.2.0
   - name: nugetDevVersion
-    value: 2.1.1
+    value: 2.2.1
 
 trigger:
   - master
