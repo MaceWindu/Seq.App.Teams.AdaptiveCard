@@ -6,7 +6,16 @@ Seq alerting application for Microsoft Teams with AdaptiveCard support. Based on
 
 To connect application instance to Teams you need to provide Teams Webhook url. You can find required instructions [here](https://learn.microsoft.com/en-us/microsoftteams/platform/webhooks-and-connectors/how-to/add-incoming-webhook?tabs=dotnet).
 
+Alternatively you can setup integration using Workflows feature. It has it's own limitations, but potentially it will be the only way to connect in future based on [this article](https://devblogs.microsoft.com/microsoft365dev/retirement-of-office-365-connectors-within-microsoft-teams/). Setup is similar to Webhook setup. You need to add `Post to a channel when a webhook request is received` workflow, which will give you webhook URL. You need to put this URL to `Seq.App.Teams.AdaptiveCard` application settings. Note that:
+
+- custom template schema version should be 1.3
+- you cannot setup workflow for private channel (or maybe you can but I don't have this sacred knowledge yet)
+
 Because Teams currently doesn't support AdaptiveCard templating, it is done on application side using [AdaptiveCards.Templating](https://www.nuget.org/packages/AdaptiveCards.Templating) library.
+
+### Custom Templates
+
+If you design your custom templates, you should use `AdaptiveCard` schema version 1.3. While Teams itself supports version 1.5, when connected using Power Automate workflow, it cap maximum supported version to 1.3 (wonder what the word `Power` in it's name means in this case).
 
 ## Context
 
