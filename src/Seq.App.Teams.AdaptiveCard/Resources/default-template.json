@@ -38,9 +38,9 @@
                 },
                 {
                     "type": "FactSet",
-                    "$data": "${indicesAndValues(Properties)}",
                     "facts": [
                         {
+                            "$data": "${indicesAndValues(Properties)}",
                             "title": "**${_nomd(index)}**",
                             "value": "${_jsonPrettify(if(exists(value), _nomd(value), ''))}"
                         }
@@ -203,7 +203,7 @@
                 },
                 {
                     "type": "Column",
-                    "width": "stretch",
+                    "width": "auto",
                     "items": [
                         {
                             "type": "ActionSet",
