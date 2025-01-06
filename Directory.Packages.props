@@ -1,17 +1,23 @@
 <Project>
     <ItemGroup>
+        <!--main-->
         <PackageVersion Include="Seq.Apps" Version="2023.4.0" />
-        <PackageVersion Include="AdaptiveCards.Templating" Version="2.0.2" />
-        <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="8.0.0" />
-        <PackageVersion Include="PolySharp" Version="1.14.1" />
-        <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.10.0" />
-        <PackageVersion Include="NUnit3TestAdapter" Version="4.5.0" />
-        <PackageVersion Include="NUnit" Version="4.1.0" />
+        <PackageVersion Include="AdaptiveCards.Templating" Version="2.0.4" />
         <PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />
-        <PackageVersion Include="System.Text.Json" Version="8.0.4" />
+        <PackageVersion Include="PolySharp" Version="1.15.0" />
+        <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="8.0.0" />
+        <!--dependency pinning as Seq uses v8 currently-->
+        <PackageVersion Include="System.Text.Json" Version="8.0.5" />
+
+        <!--shared-->
         <PackageVersion Include="Lindhart.Analyser.MissingAwaitWarning" Version="3.1.0-beta" />
-        <PackageVersion Include="NUnit.Analyzers" Version="4.2.0" />
-        <PackageVersion Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="9.0.0-preview.24318.1" />
-        <PackageVersion Include="Microsoft.CodeAnalysis.Analyzers" Version="3.11.0-beta1.24318.1" />
+        <PackageVersion Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="9.0.0-preview.24527.2" />
+        <PackageVersion Include="Microsoft.CodeAnalysis.Analyzers" Version="3.11.0-beta1.24527.2" />
+
+        <!--tests-->
+        <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
+        <PackageVersion Include="NUnit3TestAdapter" Version="4.6.0" />
+        <PackageVersion Include="NUnit" Version="4.3.2" />
+        <PackageVersion Include="NUnit.Analyzers" Version="4.5.0" />
     </ItemGroup>
 </Project>
