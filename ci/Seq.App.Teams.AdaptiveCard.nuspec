@@ -36,6 +36,7 @@
         <file src="../.build/publish/Microsoft.Bot.AdaptiveExpressions.Core.dll"               target="lib/netstandard2.0/" />
         <file src="../.build/publish/Microsoft.Recognizers.Text.DataTypes.TimexExpression.dll" target="lib/netstandard2.0/" />
         <file src="../.build/publish/Json.More.dll"                                            target="lib/netstandard2.0/" />
+        <file src="../.build/publish/System.Text.Json.dll"                                     target="lib/netstandard2.0/" />
 
     </files>
 </package>
