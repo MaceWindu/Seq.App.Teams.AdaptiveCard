@@ -41,8 +41,8 @@
                     "facts": [
                         {
                             "$data": "${indicesAndValues(Properties)}",
-                            "title": "**${_nomd(index)}**",
-                            "value": "${_jsonPrettify(if(exists(value), _nomd(value), ''))}"
+                            "title": "**${index}**",
+                            "value": "${_jsonPrettify(if(exists(value), value, ''))}"
                         }
                     ]
                 },

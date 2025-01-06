@@ -21,6 +21,7 @@
         <PackageReference Include="Seq.Apps" />
         <PackageReference Include="AdaptiveCards.Templating" />
         <PackageReference Include="Newtonsoft.Json" />
+        <PackageReference Include="System.Text.Json" />
 
         <PackageReference Include="PolySharp" />
         <PackageReference Include="Microsoft.SourceLink.GitHub">

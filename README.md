@@ -9,7 +9,7 @@ To connect application instance to Teams you need to provide Teams Webhook url. 
 Alternatively you can setup integration using Workflows feature. It has it's own limitations, but potentially it will be the only way to connect in future based on [this article](https://devblogs.microsoft.com/microsoft365dev/retirement-of-office-365-connectors-within-microsoft-teams/). Setup is similar to Webhook setup. You need to add `Post to a channel when a webhook request is received` workflow, which will give you webhook URL. You need to put this URL to `Seq.App.Teams.AdaptiveCard` application settings. Note that:
 
 - custom template schema version should be 1.3
-- you cannot setup workflow for private channel (or maybe you can but I don't have this sacred knowledge yet)
+- to post notifications to private channel you need to edit workflow action `Send each adaptive card` `Post as` option to use `User` value (default is `Flow bot`)
 
 Because Teams currently doesn't support AdaptiveCard templating, it is done on application side using [AdaptiveCards.Templating](https://www.nuget.org/packages/AdaptiveCards.Templating) library.
 
