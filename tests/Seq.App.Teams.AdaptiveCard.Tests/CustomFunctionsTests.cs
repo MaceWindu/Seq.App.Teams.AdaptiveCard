@@ -9,6 +9,8 @@ internal sealed class CustomFunctionsTests
     [TestCase(null, "\"${val}\"")]
     [TestCase(123, "123")]
     [TestCase("_italic_", "\"\\\\_italic\\\\_\"")]
+    [TestCase("`magic`", "\"\\\\\\u0060magic\\\\\\u0060\"")]
+    [TestCase("*bold too*", "\"\\\\*bold too\\\\*\"")]
     [TestCase("**bold**", "\"\\\\*\\\\*bold\\\\*\\\\*\"")]
     [TestCase("*italic too*", "\"\\\\*italic too\\\\*\"")]
     [TestCase("- list\r\n- item", "\"\\\\- list\\r\\n\\\\- item\"")]

@@ -35,6 +35,8 @@ public sealed partial class TeamsApp
                     // for D. we should escape dot
                     .Replace(". ", "\\. ")
                     .Replace("](", "\\](")
+                    // not documented and not formatted, but disappears from text if not escaped
+                    .Replace("`", "\\`")
                     ;
             }
 
