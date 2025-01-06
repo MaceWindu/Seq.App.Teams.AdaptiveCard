@@ -28,8 +28,11 @@ public sealed partial class TeamsApp
                 // character, used in markdown
                 return strValue
                     .Replace("_", "\\_")
-                    .Replace("**", "\\**")
+                    // escape * instead of ** as MS implementation works not like documented
+                    //.Replace("**", "\\**")
+                    .Replace("*", "\\*")
                     .Replace("- ", "\\- ")
+                    // for D. we should escape dot
                     .Replace(". ", "\\. ")
                     .Replace("](", "\\](")
                     ;
