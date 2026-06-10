@@ -3,6 +3,7 @@ using Seq.Apps.LogEvents;
 using Serilog;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 namespace Seq.App.Teams;
@@ -17,14 +18,13 @@ public sealed partial class TeamsApp : SeqApp, ISubscribeToAsync<LogEventData>
 
     private ILogger _log = default!;
     private string _defaultTemplate = default!;
-    private HashSet<LogEventLevel>? _loggedLevels;
-    private IReadOnlyList<IReadOnlyList<string>>? _excludedProperties;
 
+    [field: MaybeNull]
     private HashSet<LogEventLevel> LogEventLevelList
     {
         get
         {
-            if (_loggedLevels == null)
+            if (field == null)
             {
                 var result = new HashSet<LogEventLevel>();
                 if (!string.IsNullOrEmpty(LogEventLevels))
@@ -42,18 +42,19 @@ public sealed partial class TeamsApp : SeqApp, ISubscribeToAsync<LogEventData>
                     }
                 }
 
-                _loggedLevels = result;
+                field = result;
             }
 
-            return _loggedLevels;
+            return field;
         }
     }
 
+    [field: MaybeNull]
     private IReadOnlyList<IReadOnlyList<string>> ExcludedProperties
     {
         get
         {
-            if (_excludedProperties == null)
+            if (field == null)
             {
                 var result = new List<IReadOnlyList<string>>();
                 if (!string.IsNullOrWhiteSpace(PropertiesToExclude))
@@ -71,10 +72,10 @@ public sealed partial class TeamsApp : SeqApp, ISubscribeToAsync<LogEventData>
                     }
                 }
 
-                _excludedProperties = result;
+                field = result;
             }
 
-            return _excludedProperties;
+            return field;
         }
     }
 
@@ -119,32 +120,7 @@ public sealed partial class TeamsApp : SeqApp, ISubscribeToAsync<LogEventData>
                     }
                     break;
                 case '\\':
-                    if (path.Length < i + 2)
-                    {
-                        valid = false;
-                    }
-                    else
-                    {
-                        switch (path[i + 1])
-                        {
-                            case 'r':
-                                _ = sb.Append('\r');
-                                i++;
-                                break;
-                            case 'n':
-                                _ = sb.Append('\n');
-                                i++;
-                                break;
-                            case ']':
-                            case '\\':
-                                _ = sb.Append(path[i + 1]);
-                                i++;
-                                break;
-                            default:
-                                valid = false;
-                                break;
-                        }
-                    }
+                    valid = TryAppendEscape(path, sb, ref i);
                     break;
                 case '\r':
                 case '\n':
@@ -164,5 +140,34 @@ public sealed partial class TeamsApp : SeqApp, ISubscribeToAsync<LogEventData>
         }
 
         return valid ? properties : null;
+    }
+
+    // Handles a backslash escape sequence at path[i]; appends the unescaped char to sb,
+    // advances i past the escaped char, and returns whether the sequence was valid.
+    private static bool TryAppendEscape(string path, StringBuilder sb, ref int i)
+    {
+        if (path.Length < i + 2)
+        {
+            return false;
+        }
+
+        switch (path[i + 1])
+        {
+            case 'r':
+                _ = sb.Append('\r');
+                i++;
+                return true;
+            case 'n':
+                _ = sb.Append('\n');
+                i++;
+                return true;
+            case ']':
+            case '\\':
+                _ = sb.Append(path[i + 1]);
+                i++;
+                return true;
+            default:
+                return false;
+        }
     }
 }

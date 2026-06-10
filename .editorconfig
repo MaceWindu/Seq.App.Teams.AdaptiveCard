@@ -116,3 +116,7 @@ dotnet_naming_rule.rule_for_fields.style = style_camel_case
 ####################################################################################
 
 dotnet_diagnostic.NUnit2045.severity = none # NUnit2045: Use Assert.Multiple
+
+# Meziantou.Analyzer
+dotnet_diagnostic.MA0016.severity = none # MA0016: Prefer collection abstraction - ParsePropertyPath's public List<string>? signature is intentional (consumed by tests/indexing)
+dotnet_diagnostic.MA0101.severity = none # MA0101: Implicit end-of-line in string - the WRAP_PREFIX/WRAP_SUFFIX JSON envelope constants are deliberately multiline

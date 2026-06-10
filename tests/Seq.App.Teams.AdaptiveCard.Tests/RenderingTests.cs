@@ -4,10 +4,12 @@ using Seq.Apps;
 using Seq.Apps.LogEvents;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 
 namespace Seq.App.Teams.Tests;
 
+[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
 internal sealed class RenderingTests
 {
     private static readonly Event<LogEventData> _event = new(
@@ -23,7 +25,7 @@ internal sealed class RenderingTests
             RenderedMessage = "rendered message",
             Exception = @"exception
 data",
-            Properties = new Dictionary<string, object?>()
+            Properties = new Dictionary<string, object?>(StringComparer.Ordinal)
             {
                 { "#FieldString", "my string" },
                 { "#FieldNumber", -123 },
@@ -32,7 +34,7 @@ data",
                 { "#FieldSimpleStringArray", new string[] { "1", "2", "3" } },
                 { "#FieldSimpleIntArray", new int[] { 1, 2, 3 } },
                 { "#FieldObjectArray", new object[] { new { one = 1, two = 2 }, new { one = -1, two = -2 }}},
-            }
+            },
         });
 
     [TestCase(/*lang=json,strict*/ "{ \"key\": \"${unknown_field}\"}", /*lang=json,strict*/ "{\"key\":\"${unknown_field}\"}")]
@@ -85,7 +87,7 @@ data",
     [Test]
     public void TestObjectAsString()
     {
-        var cardTemplate = new AdaptiveCardTemplate($"{{\"key\":\"${{jsonStringify(_nomd(val))}}\"}}");
+        var cardTemplate = new AdaptiveCardTemplate("{\"key\":\"${jsonStringify(_nomd(val))}\"}");
         var result = cardTemplate.Expand(new { val = new { one = 1, two = "two", three = (string?)null } });
         var errors = cardTemplate.GetLastTemplateExpansionWarnings();
 
@@ -97,7 +99,7 @@ data",
     [Test]
     public void TestArrayAsString()
     {
-        var cardTemplate = new AdaptiveCardTemplate($"{{\"key\":\"${{jsonStringify(_nomd(val))}}\"}}");
+        var cardTemplate = new AdaptiveCardTemplate("{\"key\":\"${jsonStringify(_nomd(val))}\"}");
         var result = cardTemplate.Expand(new { val = new object?[] { 1, "two", null } });
         var errors = cardTemplate.GetLastTemplateExpansionWarnings();
 

@@ -19,7 +19,7 @@ public sealed partial class TeamsApp
             {
                 credentials = new NetworkCredential(WebProxyUserName, WebProxyPassword);
             }
-            _httpClientHandler.Proxy = new WebProxy(WebProxy, false, null, credentials);
+            _httpClientHandler.Proxy = new WebProxy(WebProxy, BypassOnLocal: false, BypassList: null, credentials);
             _httpClientHandler.UseProxy = true;
         }
         else

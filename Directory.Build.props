@@ -1,5 +1,15 @@
 ﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
+    <PropertyGroup Label="Versioning">
+        <!--bump to the next version after each release-->
+        <Version>2.4.0</Version>
+        <!--CI overrides VersionSuffix (e.g. -rc.<build>) for dev feeds and sets ApplyVersionSuffix=false for release-->
+        <VersionSuffix Condition=" '$(VersionSuffix)' == '' ">-local.1</VersionSuffix>
+        <ApplyVersionSuffix Condition=" '$(ApplyVersionSuffix)' == '' ">true</ApplyVersionSuffix>
+        <PackageVersion>$(Version)</PackageVersion>
+        <PackageVersion Condition=" '$(ApplyVersionSuffix)' == 'true' ">$(PackageVersion)$(VersionSuffix)</PackageVersion>
+    </PropertyGroup>
+
     <PropertyGroup>
         <Configurations>Debug;Release</Configurations>
 
@@ -20,7 +30,8 @@
         <RunAnalyzersDuringLiveAnalysis>true</RunAnalyzersDuringLiveAnalysis>
         <AnalysisLevel>preview-All</AnalysisLevel>
         <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
-        <ReportAnalyzer>true</ReportAnalyzer>
+        <!--set true temporarily to profile per-analyzer build cost-->
+        <ReportAnalyzer>false</ReportAnalyzer>
 
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
 
@@ -34,12 +45,18 @@
             <IncludeAssets>analyzers</IncludeAssets>
         </PackageReference>
 
-        <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers">
+        <PackageReference Include="AsyncFixer">
             <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>build; analyzers</IncludeAssets>
+            <IncludeAssets>analyzers</IncludeAssets>
         </PackageReference>
 
-        <PackageReference Include="Microsoft.CodeAnalysis.Analyzers">
+        <PackageReference Include="Meziantou.Analyzer">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>analyzers</IncludeAssets>
+        </PackageReference>
+
+        <!--Microsoft.CodeAnalysis.Analyzers removed: bundled with the SDK-->
+        <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>build; analyzers</IncludeAssets>
         </PackageReference>

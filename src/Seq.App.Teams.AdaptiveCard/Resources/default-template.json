@@ -59,7 +59,7 @@
             "items": [
                 {
                     "type": "TextBlock",
-                    "text": "Alert condition triggered by [${_nomd(Properties.NamespacedAlertTitle)}](Alert.Url)",
+                    "text": "Alert condition triggered by [${_nomd(Properties.NamespacedAlertTitle)}](${Properties.Alert.Url})",
                     "wrap": true
                 },
                 {
