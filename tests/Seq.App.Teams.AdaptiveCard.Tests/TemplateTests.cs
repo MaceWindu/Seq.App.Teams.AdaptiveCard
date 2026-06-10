@@ -4,12 +4,14 @@ using Seq.Apps;
 using Seq.Apps.LogEvents;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
 
 namespace Seq.App.Teams.Tests;
 
+[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
 internal sealed class TemplateTests
 {
     private static readonly Event<LogEventData> _event = new(
@@ -25,7 +27,7 @@ internal sealed class TemplateTests
             RenderedMessage = "rendered message",
             Exception = @"exception
 data",
-            Properties = new Dictionary<string, object?>()
+            Properties = new Dictionary<string, object?>(StringComparer.Ordinal)
             {
                 { "#FieldString", "my string" },
                 { "#FieldNumber", -123 },
@@ -34,13 +36,13 @@ data",
                 { "#FieldSimpleStringArray", new string[] { "1", "2", "3" } },
                 { "#FieldSimpleIntArray", new int[] { 1, 2, 3 } },
                 { "#FieldObjectArray", new object[] { new { one = 1, two = 2 }, new { one = -1, two = -2 }}},
-            }
+            },
         });
 
     [Test]
     public void TestDefaultTemplate()
     {
-        var data = new Dictionary<string, object?>()
+        var data = new Dictionary<string, object?>(StringComparer.Ordinal)
         {
             { "Id", _event.Id },
             { "TimeStamp", _event.Timestamp.ToString("O") },
@@ -52,26 +54,16 @@ data",
             { "EventType", _event.EventType },
             { "AppTitle", "app title" },
             { "InstanceName", "instance name" },
-            { "BaseUri", "http://localhost" }
+            { "BaseUri", "http://localhost" },
         };
 
-        using var stream = typeof(TeamsApp).Assembly.GetManifestResourceStream("Seq.App.Teams.AdaptiveCard.Resources.default-template.json")!;
-        using var reader = new StreamReader(stream);
-        var template = reader.ReadToEnd();
-
-        var cardTemplate = new AdaptiveCardTemplate(template);
-        var result = cardTemplate.Expand(data);
-        var errors = cardTemplate.GetLastTemplateExpansionWarnings();
-
-        Assert.That(errors, Is.Empty);
-        Assert.That(result.Count(c => c == '$'), Is.EqualTo(1));
-        Assert.DoesNotThrow(() => JsonDocument.Parse(result));
+        AssertDefaultTemplateExpands(data);
     }
 
     [Test]
     public void TestDefaultTemplateNoOptionsData()
     {
-        var data = new Dictionary<string, object?>()
+        var data = new Dictionary<string, object?>(StringComparer.Ordinal)
         {
             { "Id", _event.Id },
             { "TimeStamp", _event.Timestamp.ToString("O") },
@@ -83,29 +75,19 @@ data",
             { "EventType", _event.EventType },
             { "AppTitle", "app title" },
             { "InstanceName", "instance name" },
-            { "BaseUri", "http://localhost" }
+            { "BaseUri", "http://localhost" },
         };
 
-        using var stream = typeof(TeamsApp).Assembly.GetManifestResourceStream("Seq.App.Teams.AdaptiveCard.Resources.default-template.json")!;
-        using var reader = new StreamReader(stream);
-        var template = reader.ReadToEnd();
-
-        var cardTemplate = new AdaptiveCardTemplate(template);
-        var result = cardTemplate.Expand(data);
-        var errors = cardTemplate.GetLastTemplateExpansionWarnings();
-
-        Assert.That(errors, Is.Empty);
-        Assert.That(result.Count(c => c == '$'), Is.EqualTo(1));
-        Assert.DoesNotThrow(() => JsonDocument.Parse(result));
+        AssertDefaultTemplateExpands(data);
     }
 
     [Test]
     public void TestAlertTemplate()
     {
-        var props = new Dictionary<string, object?>()
+        var props = new Dictionary<string, object?>(StringComparer.Ordinal)
         {
             { "NamespacedAlertTitle", "Alert/Name" },
-            { "Alert", new Dictionary<string, object?>()
+            { "Alert", new Dictionary<string, object?>(StringComparer.Ordinal)
             {
                 { "Id", "alert-463"},
                 {"Title", "New Alert" },
@@ -114,9 +96,9 @@ data",
                 { "SignalExpressionDescription", null},
                 {"Query", "select count(*) as count from stream group by time(1m) having count > 0 limit 100 for background" },
                 { "HavingClause","count > 0"},
-                {"TimeGrouping", "1 minute"}
+                {"TimeGrouping", "1 minute"},
             }},
-            {"Source", new Dictionary<string, object?>()
+            {"Source", new Dictionary<string, object?>(StringComparer.Ordinal)
             {
                 { "RangeStart", "2023-06-22T13:05:43.3585376Z"},
                 { "RangeEnd", "2023-06-22T13:06:43.3585376Z"},
@@ -125,20 +107,20 @@ data",
                 {
                     new object[]{ "time", "count" },
                     new object[]{ "2023-06-22T13:05:43.3585376Z", 19 },
-                    new object[]{ "2023-06-22T13:05:44.3585376Z", 5 }
+                    new object[]{ "2023-06-22T13:05:44.3585376Z", 5 },
                 } },
                 { "ContributingEvents", new object[]{
                     new object[]{ "id", "timestamp", "message" },
                     new object[]{ "event-6d291458732108db9333010000000000", "2023-06-22T13:06:00.5580888Z", "event message 1" },
-                    new object[]{ "event-6d291458732108db9433010000000000", "2023-06-22T13:06:00.5580888Z", "event message 2" }
+                    new object[]{ "event-6d291458732108db9433010000000000", "2023-06-22T13:06:00.5580888Z", "event message 2" },
                 }
-                }
+                },
             }},
             { "SuppressedUntil", "2023-06-22T13:08:13.3585376Z"},
-            { "Failures", null }
+            { "Failures", null },
         };
 
-        var data = new Dictionary<string, object?>()
+        var data = new Dictionary<string, object?>(StringComparer.Ordinal)
         {
             { "Id", _event.Id },
             { "TimeStamp", _event.Timestamp.ToString("O") },
@@ -150,29 +132,19 @@ data",
             { "EventType", 2716299265 },
             { "AppTitle", "app title" },
             { "InstanceName", "instance name" },
-            { "BaseUri", "http://localhost" }
+            { "BaseUri", "http://localhost" },
         };
 
-        using var stream = typeof(TeamsApp).Assembly.GetManifestResourceStream("Seq.App.Teams.AdaptiveCard.Resources.default-template.json")!;
-        using var reader = new StreamReader(stream);
-        var template = reader.ReadToEnd();
-
-        var cardTemplate = new AdaptiveCardTemplate(template);
-        var result = cardTemplate.Expand(data);
-        var errors = cardTemplate.GetLastTemplateExpansionWarnings();
-
-        Assert.That(errors, Is.Empty);
-        Assert.That(result.Count(c => c == '$'), Is.EqualTo(1));
-        Assert.DoesNotThrow(() => JsonDocument.Parse(result));
+        AssertDefaultTemplateExpands(data);
     }
 
     [Test]
     public void TestAlertTemplateNoOptionalData()
     {
-        var props = new Dictionary<string, object?>()
+        var props = new Dictionary<string, object?>(StringComparer.Ordinal)
         {
             { "NamespacedAlertTitle", "Alert/Name" },
-            { "Alert", new Dictionary<string, object?>()
+            { "Alert", new Dictionary<string, object?>(StringComparer.Ordinal)
             {
                 { "Id", "alert-463"},
                 {"Title", "New Alert" },
@@ -181,21 +153,21 @@ data",
                 { "SignalExpressionDescription", null},
                 {"Query", "select count(*) as count from stream group by time(1m) having count > 0 limit 100 for background" },
                 { "HavingClause","count > 0"},
-                {"TimeGrouping", "1 minute"}
+                {"TimeGrouping", "1 minute"},
             }},
-            {"Source", new Dictionary<string, object?>()
+            {"Source", new Dictionary<string, object?>(StringComparer.Ordinal)
             {
                 { "RangeStart", "2023-06-22T13:05:43.3585376Z"},
                 { "RangeEnd", "2023-06-22T13:06:43.3585376Z"},
                 {"ResultsUrl", "http://localhost:80/#/events?q=select%20count%28%2A%29%20as%20count%20from%20stream%20group%20by%20time%281m%29%20having%20count%20%3E%200%20limit%20100%20for%20background&from=2023-06-22T13:05:43.3585376Z&to=2023-06-22T13:06:43.3585376Z" },
                 { "Results",  null },
-                { "ContributingEvents",  null }
+                { "ContributingEvents",  null },
             }},
             { "SuppressedUntil", "2023-06-22T13:08:13.3585376Z"},
-            { "Failures", null }
+            { "Failures", null },
         };
 
-        var data = new Dictionary<string, object?>()
+        var data = new Dictionary<string, object?>(StringComparer.Ordinal)
         {
             { "Id", _event.Id },
             { "TimeStamp", _event.Timestamp.ToString("O") },
@@ -207,29 +179,19 @@ data",
             { "EventType", 2716299265 },
             { "AppTitle", "app title" },
             { "InstanceName", "instance name" },
-            { "BaseUri", "http://localhost" }
+            { "BaseUri", "http://localhost" },
         };
 
-        using var stream = typeof(TeamsApp).Assembly.GetManifestResourceStream("Seq.App.Teams.AdaptiveCard.Resources.default-template.json")!;
-        using var reader = new StreamReader(stream);
-        var template = reader.ReadToEnd();
-
-        var cardTemplate = new AdaptiveCardTemplate(template);
-        var result = cardTemplate.Expand(data);
-        var errors = cardTemplate.GetLastTemplateExpansionWarnings();
-
-        Assert.That(errors, Is.Empty);
-        Assert.That(result.Count(c => c == '$'), Is.EqualTo(1));
-        Assert.DoesNotThrow(() => JsonDocument.Parse(result));
+        AssertDefaultTemplateExpands(data);
     }
 
     [Test(Description = "https://github.com/microsoft/botbuilder-dotnet/issues/6814")]
     public void TestV2Regression()
     {
-        var props = new Dictionary<string, object?>()
+        var props = new Dictionary<string, object?>(StringComparer.Ordinal)
         {
             { "NamespacedAlertTitle", "Alert/Name" },
-            { "Alert", new Dictionary<string, object?>()
+            { "Alert", new Dictionary<string, object?>(StringComparer.Ordinal)
             {
                 { "Id", "alert-463"},
                 {"Title", "New Alert" },
@@ -238,9 +200,9 @@ data",
                 { "SignalExpressionDescription", null},
                 {"Query", "select count(*) as count from stream group by time(1m) having count > 0 limit 100 for background" },
                 { "HavingClause","count > 0"},
-                {"TimeGrouping", "1 minute"}
+                {"TimeGrouping", "1 minute"},
             }},
-            {"Source", new Dictionary<string, object?>()
+            {"Source", new Dictionary<string, object?>(StringComparer.Ordinal)
             {
                 { "RangeStart", "2023-06-22T13:05:43.3585376Z"},
                 { "RangeEnd", "2023-06-22T13:06:43.3585376Z"},
@@ -249,20 +211,20 @@ data",
                 {
                     new object[]{ "time", "count" },
                     new object[]{ "2023-06-22T13:05:43.3585376Z", 19 },
-                    new object[]{ "2023-06-22T13:05:44.3585376Z", 5 }
+                    new object[]{ "2023-06-22T13:05:44.3585376Z", 5 },
                 } },
                 { "ContributingEvents", new object[]{
                     new object[]{ "id", "timestamp", "message" },
                     new object[]{ "event-6d291458732108db9333010000000000", "2023-06-22T13:06:00.5580888Z", /*lang=json,strict*/ "{\"Step\":\"BeforeExecute\",\"Operation\":\"ExecuteReader\"}" },
-                    new object[]{ "event-6d291458732108db9433010000000000", "2023-06-22T13:06:00.5580888Z", "event message 2" }
+                    new object[]{ "event-6d291458732108db9433010000000000", "2023-06-22T13:06:00.5580888Z", "event message 2" },
                 }
-                }
+                },
             }},
             { "SuppressedUntil", "2023-06-22T13:08:13.3585376Z"},
-            { "Failures", null }
+            { "Failures", null },
         };
 
-        var data = new Dictionary<string, object?>()
+        var data = new Dictionary<string, object?>(StringComparer.Ordinal)
         {
             { "Id", _event.Id },
             { "TimeStamp", _event.Timestamp.ToString("O") },
@@ -274,15 +236,19 @@ data",
             { "EventType", 2716299265 },
             { "AppTitle", "app title" },
             { "InstanceName", "instance name" },
-            { "BaseUri", "http://localhost" }
+            { "BaseUri", "http://localhost" },
         };
 
+        AssertDefaultTemplateExpands(data);
+    }
+
+    private static void AssertDefaultTemplateExpands(Dictionary<string, object?> data)
+    {
         using var stream = typeof(TeamsApp).Assembly.GetManifestResourceStream("Seq.App.Teams.AdaptiveCard.Resources.default-template.json")!;
         using var reader = new StreamReader(stream);
         var template = reader.ReadToEnd();
 
         var cardTemplate = new AdaptiveCardTemplate(template);
-
         var result = cardTemplate.Expand(data);
         var errors = cardTemplate.GetLastTemplateExpansionWarnings();
 

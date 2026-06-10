@@ -1,9 +1,11 @@
 ﻿using AdaptiveCards.Templating;
 using NUnit.Framework;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 
 namespace Seq.App.Teams.Tests;
 
+[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
 internal sealed class CustomFunctionsTests
 {
     [TestCase(null, "\"${val}\"")]
@@ -18,7 +20,7 @@ internal sealed class CustomFunctionsTests
     [TestCase("[link](http://local.host)", "\"[link\\\\](http://local.host)\"")]
     public void TestNoMarkdown(object? value, string expected)
     {
-        var cardTemplate = new AdaptiveCardTemplate($"{{\"key\":\"${{_nomd(val)}}\"}}");
+        var cardTemplate = new AdaptiveCardTemplate("{\"key\":\"${_nomd(val)}\"}");
         var result = cardTemplate.Expand(new { val = value });
         var errors = cardTemplate.GetLastTemplateExpansionWarnings();
 
@@ -30,7 +32,7 @@ internal sealed class CustomFunctionsTests
     [Test]
     public void TestJsonFormatting()
     {
-        var cardTemplate = new AdaptiveCardTemplate($"{{\"key\":\"${{_jsonPrettify(val)}}\"}}");
+        var cardTemplate = new AdaptiveCardTemplate("{\"key\":\"${_jsonPrettify(val)}\"}");
         var result = cardTemplate.Expand(new { val = new { one = 1, two = "two", three = (string?)null } });
         var errors = cardTemplate.GetLastTemplateExpansionWarnings();
 
@@ -50,7 +52,7 @@ internal sealed class CustomFunctionsTests
     [TestCase("123", "")]
     public void TestColorFunction(object? color, string expected)
     {
-        var cardTemplate = new AdaptiveCardTemplate($"{{\"key\":\"${{_colorUri(color)}}\"}}");
+        var cardTemplate = new AdaptiveCardTemplate("{\"key\":\"${_colorUri(color)}\"}");
         var result = cardTemplate.Expand(new { color });
         var errors = cardTemplate.GetLastTemplateExpansionWarnings();
 

@@ -32,7 +32,7 @@ public sealed partial class TeamsApp
 
     private Dictionary<string, object?> BuildPayload(Event<LogEventData> evt)
     {
-        var data = new Dictionary<string, object?>()
+        var data = new Dictionary<string, object?>(StringComparer.Ordinal)
         {
             { "Id", evt.Id },
             { "TimeStamp", evt.Timestamp.ToString("O") },
@@ -66,7 +66,7 @@ public sealed partial class TeamsApp
                     }
                     else if (value is IReadOnlyDictionary<string, object?> roDict)
                     {
-                        currentData[name] = currentData = roDict.ToDictionary(_ => _.Key, _ => _.Value);
+                        currentData[name] = currentData = roDict.ToDictionary(_ => _.Key, _ => _.Value, StringComparer.Ordinal);
                     }
                     else
                     {
@@ -92,7 +92,7 @@ public sealed partial class TeamsApp
     {
         using var client = new HttpClient(_httpClientHandler, disposeHandler: false)
         {
-            BaseAddress = new Uri(TeamsBaseUrl)
+            BaseAddress = new Uri(TeamsBaseUrl),
         };
 
         client.DefaultRequestHeaders.Accept.Clear();
