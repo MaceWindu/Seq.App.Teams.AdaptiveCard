@@ -1,10 +1,11 @@
-﻿using NUnit.Framework;
-using Seq.App.Teams;
+using NUnit.Framework;
+using System.Diagnostics.CodeAnalysis;
+
+namespace Seq.App.Teams.Tests;
 
 [SetUpFixture]
-#pragma warning disable CA1050 // Declare types in namespaces
+[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
 internal sealed class TestsInitialization
-#pragma warning restore CA1050 // Declare types in namespaces
 {
     [OneTimeSetUp]
     public void TestAssemblySetup()

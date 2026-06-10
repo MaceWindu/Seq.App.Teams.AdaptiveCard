@@ -1,7 +1,9 @@
 ﻿using NUnit.Framework;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Seq.App.Teams.Tests;
 
+[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
 internal sealed class SettingsTests
 {
     [TestCase("", null)]

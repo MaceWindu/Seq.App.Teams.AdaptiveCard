@@ -1,21 +1,91 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
-        <Version>2.0.0</Version>
 
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-        <NoWarn>CS1591</NoWarn>
+        <!--CS1591: missing xmldoc; NU5128: dependency-free package with lib/ content (deps are bundled, see IncludeDependencyDlls)-->
+        <NoWarn>CS1591;NU5128</NoWarn>
+
+        <!--embed PDB into the assembly so symbols travel with the DLL that is bundled in lib/ (no snupkg)-->
+        <DebugType>embedded</DebugType>
+        <EmbedUntrackedSources>true</EmbedUntrackedSources>
     </PropertyGroup>
 
-    <PropertyGroup Condition="'$(Configuration)'=='Release'">
-        <DebugType>portable</DebugType>
-        <EmbedUntrackedSources>true</EmbedUntrackedSources>
-        <DebugSymbols>true</DebugSymbols>
+    <PropertyGroup Label="Package">
+        <IsPackable>true</IsPackable>
+        <PackageId>Seq.App.Teams.AdaptiveCard</PackageId>
+        <Title>Microsoft Teams alerting application for Seq with AdaptiveCard support</Title>
+        <Description>Seq alerting application to send notifications to Microsoft Teams channels using AdaptiveCard templates.</Description>
+        <Authors>MaceWindu@github.com</Authors>
+        <Copyright>Copyright © 2026</Copyright>
+        <PackageTags>teams seq adaptivecard seq-app</PackageTags>
+        <PackageProjectUrl>https://github.com/MaceWindu/Seq.App.Teams.AdaptiveCard</PackageProjectUrl>
+        <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+        <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageIcon>icon.png</PackageIcon>
+        <PackageReleaseNotes>https://github.com/MaceWindu/Seq.App.Teams.AdaptiveCard/releases/tag/v$(Version)</PackageReleaseNotes>
+
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <RepositoryUrl>https://github.com/MaceWindu/Seq.App.Teams.AdaptiveCard.git</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+
+        <!--Seq does not resolve nuget dependencies: bundle the plugin-specific dependency DLLs into
+            lib/ (see IncludeDependencyDlls) instead of declaring nuget <dependencies>. Assemblies the
+            Seq host already provides (Seq.Apps, Serilog, Newtonsoft.Json, System.Text.Json and the
+            .NET BCL shims — full list in IncludeDependencyDlls) are NOT bundled.-->
+        <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
+        <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+        <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);IncludeDependencyDlls</TargetsForTfmSpecificBuildOutput>
     </PropertyGroup>
 
     <ItemGroup>
       <EmbeddedResource Include="Resources/default-template.json" />
     </ItemGroup>
+
+    <ItemGroup Label="Package files">
+        <None Include="../../README.md" Pack="true" PackagePath="\" Visible="false" />
+        <None Include="../../LICENSE.txt" Pack="true" PackagePath="\" Visible="false" />
+        <None Include="../../ci/icon.png" Pack="true" PackagePath="\" Visible="false" />
+    </ItemGroup>
+
+    <PropertyGroup Label="Enabled Polyfills">
+        <!--https://github.com/meziantou/Meziantou.Polyfill?tab=readme-ov-file#supported-polyfills-->
+        <!--only types required by netstandard2.0 build: range/index slicing (path[^1], colorString[..2], etc.)-->
+        <Polyfill></Polyfill>
+        <Polyfill>$(Polyfill)|T:System.Index</Polyfill>
+        <Polyfill>$(Polyfill)|T:System.Range</Polyfill>
+        <!--nullability attributes (MaybeNull used by us; NotNullWhen/DoesNotReturn used by the Index/Range polyfills)-->
+        <Polyfill>$(Polyfill)|T:System.Diagnostics.CodeAnalysis</Polyfill>
+        <Polyfill>$(Polyfill)|T:System.Runtime.CompilerServices.SkipLocalsInitAttribute</Polyfill>
+        <Polyfill>$(Polyfill)|M:System.String.Replace(System.String,System.String,System.StringComparison)</Polyfill>
+        <MeziantouPolyfill_IncludedPolyfills>$(Polyfill)</MeziantouPolyfill_IncludedPolyfills>
+    </PropertyGroup>
+
+    <!--AdaptiveCards.Templating drags in PolySharp transitively, whose buildTransitive target auto-runs
+        its polyfill source generator. We use Meziantou.Polyfill instead, so strip the PolySharp generator
+        from the compiler to avoid duplicate-polyfill conflicts (ExcludeAssets does not suppress
+        buildTransitive assets coming from a sibling dependency).-->
+    <Target Name="RemovePolySharpAnalyzers" BeforeTargets="CoreCompile">
+        <ItemGroup>
+            <Analyzer Remove="@(Analyzer)" Condition="$([System.String]::new('%(Analyzer.Identity)').ToLowerInvariant().Contains('polysharp'))" />
+        </ItemGroup>
+    </Target>
+
+    <!--Bundle the plugin-specific dependency DLLs into lib/netstandard2.0 (the Seq host does not resolve
+        nuget dependencies). We bundle everything copy-local EXCEPT assemblies the Seq host already
+        provides at runtime (the .NET shared framework BCL shims, Serilog, Newtonsoft.Json,
+        System.Text.Json and Seq.Apps). A denylist (rather than an allowlist) keeps the package correct
+        when AdaptiveCards.Templating adds new transitive deps (e.g. JsonPath.Net, System.IO.Hashing).-->
+    <Target Name="IncludeDependencyDlls" DependsOnTargets="ResolveReferences">
+        <PropertyGroup>
+            <_HostProvidedDlls>;Seq.Apps;Serilog;Newtonsoft.Json;System.Text.Json;System.Text.Encodings.Web;System.Buffers;System.Memory;System.Numerics.Vectors;System.Runtime.CompilerServices.Unsafe;System.Threading.Tasks.Extensions;Microsoft.Bcl.AsyncInterfaces;Microsoft.CSharp;</_HostProvidedDlls>
+        </PropertyGroup>
+        <ItemGroup>
+            <BuildOutputInPackage Include="@(ReferenceCopyLocalPaths)"
+                Condition="'%(Extension)' == '.dll' AND !$(_HostProvidedDlls.Contains(';%(ReferenceCopyLocalPaths.FileName);'))" />
+        </ItemGroup>
+    </Target>
 
     <ItemGroup>
         <PackageReference Include="Seq.Apps" />
@@ -23,7 +93,15 @@
         <PackageReference Include="Newtonsoft.Json" />
         <PackageReference Include="System.Text.Json" />
 
-        <PackageReference Include="PolySharp" />
+        <!--needs 'build' assets too: build/Meziantou.Polyfill.targets exposes MeziantouPolyfill_IncludedPolyfills
+            to the generator; without it the generator emits every polyfill instead of only the configured ones-->
+        <PackageReference Include="Meziantou.Polyfill">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>analyzers;build</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="DotNet.ReproducibleBuilds">
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
         <PackageReference Include="Microsoft.SourceLink.GitHub">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>

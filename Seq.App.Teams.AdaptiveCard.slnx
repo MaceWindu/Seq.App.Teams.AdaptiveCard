@@ -1,0 +1,24 @@
+<Solution>
+  <Folder Name="/.root/">
+    <File Path=".editorconfig" />
+    <File Path=".gitattributes" />
+    <File Path=".gitignore" />
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Packages.props" />
+    <File Path="global.json" />
+    <File Path="LICENSE.txt" />
+    <File Path="nuget.config" />
+    <File Path="README.md" />
+    <File Path="spellcheck.txt" />
+    <File Path="testconfig.json" />
+  </Folder>
+  <Folder Name="/ci/">
+    <File Path="ci/default.yml" />
+    <File Path="ci/icon.png" />
+  </Folder>
+  <Folder Name="/tests/">
+    <File Path="tests/.editorconfig" />
+    <Project Path="tests/Seq.App.Teams.AdaptiveCard.Tests/Seq.App.Teams.AdaptiveCard.Tests.csproj" />
+  </Folder>
+  <Project Path="src/Seq.App.Teams.AdaptiveCard/Seq.App.Teams.AdaptiveCard.csproj" />
+</Solution>
