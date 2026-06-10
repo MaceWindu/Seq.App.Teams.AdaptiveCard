@@ -2,7 +2,7 @@
 
     <PropertyGroup Label="Versioning">
         <!--bump to the next version after each release-->
-        <Version>2.3.0</Version>
+        <Version>2.4.0</Version>
         <!--CI overrides VersionSuffix (e.g. -rc.<build>) for dev feeds and sets ApplyVersionSuffix=false for release-->
         <VersionSuffix Condition=" '$(VersionSuffix)' == '' ">-local.1</VersionSuffix>
         <ApplyVersionSuffix Condition=" '$(ApplyVersionSuffix)' == '' ">true</ApplyVersionSuffix>
