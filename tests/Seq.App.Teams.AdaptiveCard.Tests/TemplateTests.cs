@@ -57,7 +57,7 @@ data",
             { "BaseUri", "http://localhost" },
         };
 
-        AssertDefaultTemplateExpands(data);
+        _ = AssertDefaultTemplateExpands(data);
     }
 
     [Test]
@@ -78,7 +78,7 @@ data",
             { "BaseUri", "http://localhost" },
         };
 
-        AssertDefaultTemplateExpands(data);
+        _ = AssertDefaultTemplateExpands(data);
     }
 
     [Test]
@@ -135,7 +135,11 @@ data",
             { "BaseUri", "http://localhost" },
         };
 
-        AssertDefaultTemplateExpands(data);
+        var result = AssertDefaultTemplateExpands(data);
+
+        // https://github.com/MaceWindu/Seq.App.Teams.AdaptiveCard/issues/23
+        // the alert title link must reference the interpolated ${Properties.Alert.Url}, not a literal
+        Assert.That(result, Does.Contain("http://localhost:80/#/alerts/alert-463"));
     }
 
     [Test]
@@ -182,7 +186,7 @@ data",
             { "BaseUri", "http://localhost" },
         };
 
-        AssertDefaultTemplateExpands(data);
+        _ = AssertDefaultTemplateExpands(data);
     }
 
     [Test(Description = "https://github.com/microsoft/botbuilder-dotnet/issues/6814")]
@@ -239,10 +243,10 @@ data",
             { "BaseUri", "http://localhost" },
         };
 
-        AssertDefaultTemplateExpands(data);
+        _ = AssertDefaultTemplateExpands(data);
     }
 
-    private static void AssertDefaultTemplateExpands(Dictionary<string, object?> data)
+    private static string AssertDefaultTemplateExpands(Dictionary<string, object?> data)
     {
         using var stream = typeof(TeamsApp).Assembly.GetManifestResourceStream("Seq.App.Teams.AdaptiveCard.Resources.default-template.json")!;
         using var reader = new StreamReader(stream);
@@ -255,5 +259,7 @@ data",
         Assert.That(errors, Is.Empty);
         Assert.That(result.Count(c => c == '$'), Is.EqualTo(1));
         Assert.DoesNotThrow(() => JsonDocument.Parse(result));
+
+        return result;
     }
 }
