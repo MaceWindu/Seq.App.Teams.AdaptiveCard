@@ -62,6 +62,21 @@
         <MeziantouPolyfill_IncludedPolyfills>$(Polyfill)</MeziantouPolyfill_IncludedPolyfills>
     </PropertyGroup>
 
+    <!--Populate the nuget <repository> commit/branch (the previous .nuspec set both via git).
+        CI checks out a detached HEAD, so it overrides the branch with -p:RepositoryBranch=$(Build.SourceBranchName).-->
+    <Target Name="SetRepositoryInfo" BeforeTargets="GenerateNuspec">
+        <Exec Command="git rev-parse HEAD" ConsoleToMSBuild="true" ContinueOnError="true" StandardOutputImportance="low">
+            <Output TaskParameter="ConsoleOutput" PropertyName="_HeadCommit" />
+        </Exec>
+        <Exec Command="git rev-parse --abbrev-ref HEAD" ConsoleToMSBuild="true" ContinueOnError="true" StandardOutputImportance="low">
+            <Output TaskParameter="ConsoleOutput" PropertyName="_HeadBranch" />
+        </Exec>
+        <PropertyGroup>
+            <RepositoryCommit Condition="'$(RepositoryCommit)' == '' AND '$(_HeadCommit)' != ''">$(_HeadCommit)</RepositoryCommit>
+            <RepositoryBranch Condition="'$(RepositoryBranch)' == '' AND '$(_HeadBranch)' != '' AND '$(_HeadBranch)' != 'HEAD'">$(_HeadBranch)</RepositoryBranch>
+        </PropertyGroup>
+    </Target>
+
     <!--AdaptiveCards.Templating drags in PolySharp transitively, whose buildTransitive target auto-runs
         its polyfill source generator. We use Meziantou.Polyfill instead, so strip the PolySharp generator
         from the compiler to avoid duplicate-polyfill conflicts (ExcludeAssets does not suppress

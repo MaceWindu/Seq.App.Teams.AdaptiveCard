@@ -78,7 +78,7 @@ stages:
         configuration: '$(build_configuration)'
         outputDir: '$(nugetOutput)'
         nobuild: true
-        buildProperties: 'VersionSuffix=-rc.$(Build.BuildId)'
+        buildProperties: 'VersionSuffix=-rc.$(Build.BuildId);RepositoryBranch=$(Build.SourceBranchName)'
       displayName: Pack (prerelease)
       condition: and(succeeded(), ne(variables['Build.SourceBranchName'], 'release'))
 
@@ -90,7 +90,7 @@ stages:
         configuration: '$(build_configuration)'
         outputDir: '$(nugetOutput)'
         nobuild: true
-        buildProperties: 'ApplyVersionSuffix=false'
+        buildProperties: 'ApplyVersionSuffix=false;RepositoryBranch=$(Build.SourceBranchName)'
       displayName: Pack (release)
       condition: and(succeeded(), eq(variables['Build.SourceBranchName'], 'release'))
 
@@ -104,7 +104,9 @@ stages:
 # PUBLISH NUGET #
 #################
 
-    - task: NuGetCommand@2
+    # non-release: push to the Azure Artifacts feed via `dotnet nuget push` (DotNetCoreCLI@2 push
+    # handles the internal-feed auth and invokes dotnet under the hood)
+    - task: DotNetCoreCLI@2
       inputs:
         command: 'push'
         packagesToPush: '$(nugetOutput)/Seq.App.Teams.AdaptiveCard.*.nupkg'
@@ -113,11 +115,8 @@ stages:
       displayName: Publish to Azure Artifacts feed
       condition: and(succeeded(), ne(variables['Build.SourceBranchName'], 'release'))
 
-    - task: NuGetCommand@2
-      inputs:
-        command: 'push'
-        packagesToPush: '$(nugetOutput)/Seq.App.Teams.AdaptiveCard.*.nupkg'
-        nuGetFeedType: 'external'
-        publishFeedCredentials: 'nuget.org'
+    # release: push to nuget.org with `dotnet nuget push`.
+    # Requires a secret pipeline variable NUGET_API_KEY (nuget.org API key).
+    - script: dotnet nuget push "$(nugetOutput)/Seq.App.Teams.AdaptiveCard.*.nupkg" --source "https://api.nuget.org/v3/index.json" --api-key "$(NUGET_API_KEY)" --skip-duplicate
       displayName: Publish to Nuget.org
       condition: and(succeeded(), eq(variables['Build.SourceBranchName'], 'release'))
