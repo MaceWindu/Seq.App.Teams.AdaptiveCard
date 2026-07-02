@@ -27,7 +27,10 @@ public sealed partial class TeamsApp
             _httpClientHandler.UseProxy = false;
         }
 
-        using var stream = GetType().Assembly.GetManifestResourceStream("Seq.App.Teams.AdaptiveCard.Resources.default-template.json");
+        var resourceName = UseTeamsStyles
+            ? "Seq.App.Teams.AdaptiveCard.Resources.default-template-styles.json"
+            : "Seq.App.Teams.AdaptiveCard.Resources.default-template.json";
+        using var stream = GetType().Assembly.GetManifestResourceStream(resourceName);
         using var reader = new StreamReader(stream);
         _defaultTemplate = reader.ReadToEnd();
 

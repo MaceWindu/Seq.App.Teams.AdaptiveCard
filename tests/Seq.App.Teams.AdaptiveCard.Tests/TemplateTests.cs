@@ -14,6 +14,8 @@ namespace Seq.App.Teams.Tests;
 [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
 internal sealed class TemplateTests
 {
+    private const string StylesResource = "Seq.App.Teams.AdaptiveCard.Resources.default-template-styles.json";
+
     private static readonly Event<LogEventData> _event = new(
         id: "event-id",
         eventType: uint.MaxValue,
@@ -58,6 +60,7 @@ data",
         };
 
         _ = AssertDefaultTemplateExpands(data);
+        _ = AssertDefaultTemplateExpands(data, StylesResource);
     }
 
     [Test]
@@ -79,6 +82,7 @@ data",
         };
 
         _ = AssertDefaultTemplateExpands(data);
+        _ = AssertDefaultTemplateExpands(data, StylesResource);
     }
 
     [Test]
@@ -136,6 +140,7 @@ data",
         };
 
         var result = AssertDefaultTemplateExpands(data);
+        _ = AssertDefaultTemplateExpands(data, StylesResource);
 
         // https://github.com/MaceWindu/Seq.App.Teams.AdaptiveCard/issues/23
         // the alert title link must reference the interpolated ${Properties.Alert.Url}, not a literal
@@ -187,6 +192,7 @@ data",
         };
 
         _ = AssertDefaultTemplateExpands(data);
+        _ = AssertDefaultTemplateExpands(data, StylesResource);
     }
 
     [Test(Description = "https://github.com/microsoft/botbuilder-dotnet/issues/6814")]
@@ -244,11 +250,14 @@ data",
         };
 
         _ = AssertDefaultTemplateExpands(data);
+        _ = AssertDefaultTemplateExpands(data, StylesResource);
     }
 
-    private static string AssertDefaultTemplateExpands(Dictionary<string, object?> data)
+    private static string AssertDefaultTemplateExpands(
+        Dictionary<string, object?> data,
+        string resourceName = "Seq.App.Teams.AdaptiveCard.Resources.default-template.json")
     {
-        using var stream = typeof(TeamsApp).Assembly.GetManifestResourceStream("Seq.App.Teams.AdaptiveCard.Resources.default-template.json")!;
+        using var stream = typeof(TeamsApp).Assembly.GetManifestResourceStream(resourceName)!;
         using var reader = new StreamReader(stream);
         var template = reader.ReadToEnd();
 
