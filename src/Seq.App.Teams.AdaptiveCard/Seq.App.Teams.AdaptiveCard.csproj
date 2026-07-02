@@ -41,6 +41,7 @@
 
     <ItemGroup>
       <EmbeddedResource Include="Resources/default-template.json" />
+      <EmbeddedResource Include="Resources/default-template-styles.json" />
     </ItemGroup>
 
     <ItemGroup Label="Package files">
