@@ -1,0 +1,221 @@
+{
+    "type": "AdaptiveCard",
+    "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+    "version": "1.3",
+    "msteams": {
+        "width": "full"
+    },
+    "body": [
+        {
+            "type": "Container",
+            "style": "${if(equals(Level,'Fatal'),'attention',if(equals(Level,'Error'),'attention',if(equals(Level,'Warning'),'warning',if(equals(Level,'Information'),'accent','default'))))}",
+            "items": [
+                {
+                    "type": "TextBlock",
+                    "text": "**${Level}**",
+                    "wrap": true,
+                    "size": "ExtraLarge"
+                }
+            ]
+        },
+        {
+            "type": "TextBlock",
+            "text": "{{DATE(${formatDateTime(TimeStamp,'yyyy-MM-ddTHH:mm:ssZ')},SHORT)}} {{TIME(${formatDateTime(TimeStamp,'yyyy-MM-ddTHH:mm:ssZ')})}}",
+            "wrap": true,
+            "color": "Attention"
+        },
+        {
+            "type": "Container",
+            "$when": "${not(equals(EventType,2716299265))}",
+            "items": [
+                {
+                    "type": "TextBlock",
+                    "text": "**${_nomd(Message)}**",
+                    "wrap": true
+                },
+                {
+                    "type": "FactSet",
+                    "facts": [
+                        {
+                            "$data": "${indicesAndValues(Properties)}",
+                            "title": "**${index}**",
+                            "value": "${_jsonPrettify(if(exists(value), value, ''))}"
+                        }
+                    ]
+                },
+                {
+                    "type": "TextBlock",
+                    "$when": "${exists(Exception)}",
+                    "text": "${_nomd(Exception)}"
+                }
+            ]
+        },
+        {
+            "type": "Container",
+            "$when": "${equals(EventType,2716299265)}",
+            "items": [
+                {
+                    "type": "TextBlock",
+                    "text": "Alert condition triggered by [${_nomd(Properties.NamespacedAlertTitle)}](${Properties.Alert.Url})",
+                    "wrap": true
+                },
+                {
+                    "type": "Container",
+                    "$when": "${exists(Properties.Source.Results)}",
+                    "items": [
+                        {
+                            "type": "TextBlock",
+                            "text": "**Results**",
+                            "wrap": true
+                        },
+                        {
+                            "type": "ColumnSet",
+                            "columns": [
+                                {
+                                    "type": "Column",
+                                    "$data": "${if(exists(Properties.Source.Results), indicesAndValues(Properties.Source.Results[0]), null)}",
+                                    "width": "stretch",
+                                    "items": [
+                                        {
+                                            "type": "TextBlock",
+                                            "text": "**${_nomd(value)}**",
+                                            "wrap": true
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "type": "ColumnSet",
+                            "$data": "${if(exists(Properties.Source.Results), skip(Properties.Source.Results, 1), null)}",
+                            "columns": [
+                                {
+                                    "type": "Column",
+                                    "$data": "${if(exists($data), indicesAndValues($data), null)}",
+                                    "width": "stretch",
+                                    "items": [
+                                        {
+                                            "type": "TextBlock",
+                                            "text": "${_jsonPrettify(_nomd(value))}",
+                                            "wrap": true
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "type": "TextBlock",
+                            "text": "[Explore detected results in Seq](${Properties.Source.ResultsUrl})",
+                            "wrap": true
+                        }
+                    ]
+                },
+                {
+                    "type": "Container",
+                    "$when": "${exists(Properties.Source.ContributingEvents)}",
+                    "items": [
+                        {
+                            "type": "TextBlock",
+                            "text": "**Contributing events**",
+                            "wrap": true
+                        },
+                        {
+                            "type": "ColumnSet",
+                            "columns": [
+                                {
+                                    "type": "Column",
+                                    "width": "stretch",
+                                    "items": [
+                                        {
+                                            "type": "TextBlock",
+                                            "text": "**Time**",
+                                            "wrap": true
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "Column",
+                                    "width": "stretch",
+                                    "items": [
+                                        {
+                                            "type": "TextBlock",
+                                            "text": "**Message**",
+                                            "wrap": true
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "type": "ColumnSet",
+                            "$data": "${if(exists(Properties.Source.ContributingEvents), skip(Properties.Source.ContributingEvents, 1), null)}",
+                            "columns": [
+                                {
+                                    "type": "Column",
+                                    "width": "stretch",
+                                    "items": [
+                                        {
+                                            "type": "TextBlock",
+                                            "text": "[${$data[1]}](${$root.BaseUri}#/events?filter=@Id%3D'${$data[0]}'&show=expanded)",
+                                            "wrap": true
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "Column",
+                                    "width": "stretch",
+                                    "items": [
+                                        {
+                                            "type": "TextBlock",
+                                            "text": "${_jsonPrettify(_nomd($data[2]))}",
+                                            "wrap": true
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "ColumnSet",
+            "columns": [
+                {
+                    "type": "Column",
+                    "width": "stretch",
+                    "items": [
+                        {
+                            "type": "ActionSet",
+                            "actions": [
+                                {
+                                    "type": "Action.OpenUrl",
+                                    "$when": "${not(equals(EventType,2716299265))}",
+                                    "title": "View Event in Seq",
+                                    "url": "${BaseUri}#/events?filter=@Id%3D'${Id}'&show=expanded"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "type": "Column",
+                    "width": "auto",
+                    "items": [
+                        {
+                            "type": "ActionSet",
+                            "actions": [
+                                {
+                                    "type": "Action.OpenUrl",
+                                    "title": "Open Seq",
+                                    "url": "${BaseUri}"
+                                }
+                            ],
+                            "horizontalAlignment": "right"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

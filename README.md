@@ -21,6 +21,8 @@ If you design your custom templates, you should use `AdaptiveCard` schema versio
 
 Default template source: [default-template.json](https://github.com/MaceWindu/Seq.App.Teams.AdaptiveCard/blob/master/src/Seq.App.Teams.AdaptiveCard/Resources/default-template.json). Used when no template specified.
 
+By default the header is colored using a generated background image (via the `_colorUri` function), which gives distinct per-level colors but can render slowly in Teams ([#27](https://github.com/MaceWindu/Seq.App.Teams.AdaptiveCard/issues/27)). Enable the `Use Teams styles` setting to switch to [default-template-styles.json](https://github.com/MaceWindu/Seq.App.Teams.AdaptiveCard/blob/master/src/Seq.App.Teams.AdaptiveCard/Resources/default-template-styles.json), which uses native Teams container styles instead: it renders instantly and adapts to light/dark theme, but only a small set of pale theme colors is available. This setting only affects the built-in template — it is ignored when a custom template is specified.
+
 ### Payload Examples
 
 Those examples could be used with `AdaptiveCard` designer.

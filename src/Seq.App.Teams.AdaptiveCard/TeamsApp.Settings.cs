@@ -48,6 +48,12 @@ public sealed partial class TeamsApp
     public string? CardTemplate { get; set; }
 
     [SeqAppSetting(
+        DisplayName = "Use Teams styles",
+        HelpText = "Use Teams container styles for the header background instead of a generated background image. Renders faster but only a small set of pale theme colors is available. Only affects the built-in template — ignored when a custom AdaptiveCard template is set. See https://github.com/MaceWindu/Seq.App.Teams.AdaptiveCard/issues/27",
+        IsOptional = true)]
+    public bool UseTeamsStyles { get; set; }
+
+    [SeqAppSetting(
         DisplayName = "Excluded Properties",
         HelpText = "Specify properties to exclude from template model. Each property should be specified on separate line. Format: [property-name]+. `\\`, `]`, `\\r` and `\\n` symbols in property name should be escaped with \\: `\\\\`, `\\]`, `\\r`, `\\n`",
         InputType = SettingInputType.LongText,
