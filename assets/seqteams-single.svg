@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <defs>
+    <linearGradient id="gP" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#8f80f2"></stop><stop offset="100%" stop-color="#5849c0"></stop></linearGradient>
+    <filter id="fC" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#0a0a14" flood-opacity="0.30"></feDropShadow></filter>
+    <clipPath id="cS"><rect x="54" y="58" width="148" height="140" rx="18"></rect></clipPath>
+  </defs>
+  <rect x="8" y="8" width="240" height="240" rx="56" fill="url(#gP)"></rect>
+  <rect x="54" y="58" width="148" height="140" rx="18" fill="#f7f8fb" filter="url(#fC)"></rect>
+  <g clip-path="url(#cS)">
+    <rect x="54" y="58" width="148" height="46" fill="#6d5ae0"></rect>
+    <circle cx="78" cy="81" r="10" fill="#f6b73c"></circle>
+    <rect x="96" y="76" width="80" height="11" rx="5.5" fill="#ffffff" opacity="0.92"></rect>
+    <rect x="72" y="126" width="112" height="12" rx="6" fill="#c9cfdd"></rect>
+    <rect x="72" y="150" width="90" height="12" rx="6" fill="#c9cfdd"></rect>
+    <rect x="72" y="174" width="66" height="20" rx="10" fill="#6d5ae0"></rect>
+  </g>
+</svg>

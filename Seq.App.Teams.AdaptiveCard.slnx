@@ -14,7 +14,20 @@
   </Folder>
   <Folder Name="/ci/">
     <File Path="ci/default.yml" />
-    <File Path="ci/icon.png" />
+  </Folder>
+  <Folder Name="/assets/">
+    <File Path="assets/ico/16.png" />
+    <File Path="assets/ico/32.png" />
+    <File Path="assets/ico/48.png" />
+    <File Path="assets/seqteams-1024.png" />
+    <File Path="assets/seqteams-256.png" />
+    <File Path="assets/seqteams-github-460.png" />
+    <File Path="assets/seqteams-nuget-128.png" />
+    <File Path="assets/seqteams-single.svg" />
+    <File Path="assets/seqteams-watermark-1024.png" />
+    <File Path="assets/seqteams-watermark.svg" />
+    <File Path="assets/seqteams.ico" />
+    <File Path="assets/seqteams.svg" />
   </Folder>
   <Folder Name="/tests/">
     <File Path="tests/.editorconfig" />
