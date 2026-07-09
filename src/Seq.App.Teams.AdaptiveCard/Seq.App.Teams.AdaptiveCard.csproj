@@ -23,7 +23,7 @@
         <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
         <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
         <PackageReadmeFile>README.md</PackageReadmeFile>
-        <PackageIcon>icon.png</PackageIcon>
+        <PackageIcon>seqteams-nuget-128.png</PackageIcon>
         <PackageReleaseNotes>https://github.com/MaceWindu/Seq.App.Teams.AdaptiveCard/releases/tag/v$(Version)</PackageReleaseNotes>
 
         <PublishRepositoryUrl>true</PublishRepositoryUrl>
@@ -47,7 +47,7 @@
     <ItemGroup Label="Package files">
         <None Include="../../README.md" Pack="true" PackagePath="\" Visible="false" />
         <None Include="../../LICENSE.txt" Pack="true" PackagePath="\" Visible="false" />
-        <None Include="../../ci/icon.png" Pack="true" PackagePath="\" Visible="false" />
+        <None Include="../../assets/seqteams-nuget-128.png" Pack="true" PackagePath="\" Visible="false" />
     </ItemGroup>
 
     <PropertyGroup Label="Enabled Polyfills">
